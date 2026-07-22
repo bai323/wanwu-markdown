@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-label="Everything Markdown app icon">
+  <defs>
+    <linearGradient id="bg" x1="164" y1="102" x2="852" y2="918" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f8f5ff"/>
+      <stop offset="0.36" stop-color="#8b5cf6"/>
+      <stop offset="0.74" stop-color="#3b0764"/>
+      <stop offset="1" stop-color="#15131f"/>
+    </linearGradient>
+    <linearGradient id="facetA" x1="244" y1="186" x2="666" y2="802" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.88"/>
+      <stop offset="1" stop-color="#c4b5fd" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="facetB" x1="788" y1="222" x2="334" y2="808" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#a78bfa" stop-opacity="0.94"/>
+      <stop offset="1" stop-color="#0f0e17" stop-opacity="0.16"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="34" stdDeviation="42" flood-color="#2e1065" flood-opacity="0.28"/>
+    </filter>
+  </defs>
+
+  <rect width="1024" height="1024" rx="232" fill="#f7f7fb"/>
+  <path d="M196 260C196 218 218 179 254 158L466 35C496 18 532 18 562 35L770 156C806 177 828 215 828 257V606C828 648 806 687 770 708L558 831C528 848 492 848 462 831L254 710C218 689 196 651 196 609V260Z" fill="url(#bg)" filter="url(#shadow)"/>
+  <path d="M512 72L781 226L626 322L512 72Z" fill="url(#facetA)" opacity="0.52"/>
+  <path d="M244 234L512 72L405 352L244 234Z" fill="#ffffff" opacity="0.18"/>
+  <path d="M405 352L626 322L734 598L511 718L286 594L405 352Z" fill="#ffffff" opacity="0.1"/>
+  <path d="M626 322L781 226V606L734 598L626 322Z" fill="url(#facetB)" opacity="0.55"/>
+  <path d="M244 234L405 352L286 594L244 606V234Z" fill="#1f1235" opacity="0.28"/>
+  <path d="M286 594L511 718L463 798L244 606L286 594Z" fill="#0f0e17" opacity="0.28"/>
+  <path d="M734 598L781 606L560 798L511 718L734 598Z" fill="#22123d" opacity="0.42"/>
+
+  <path d="M348 650V374H413L512 531L611 374H676V650H604V508L534 618H490L420 508V650H348Z" fill="#ffffff"/>
+  <path d="M329 310H434C485 310 512 337 512 388V650" fill="none" stroke="#f7f3ff" stroke-width="28" stroke-linecap="round" stroke-linejoin="round" opacity="0.18"/>
+  <path d="M695 684C658 684 628 654 628 617C628 580 658 550 695 550C732 550 762 580 762 617C762 654 732 684 695 684Z" fill="#f8f5ff"/>
+  <path d="M695 588C679 588 666 601 666 617C666 633 679 646 695 646C711 646 724 633 724 617C724 601 711 588 695 588Z" fill="#6d28d9"/>
+  <path d="M695 550V505C695 467 664 436 626 436H588" fill="none" stroke="#f8f5ff" stroke-width="24" stroke-linecap="round"/>
+</svg>

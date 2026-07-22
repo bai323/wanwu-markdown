@@ -70,6 +70,8 @@ http://localhost:4173
 
 macOS 用户也可以双击 `启动万物Markdown.command`。
 
+桌面启动器可以使用仓库里的图标资产：`assets/app-icon.icns` 和 `assets/app-icon.svg`。
+
 ## 常见入口
 
 网页文章：复制浏览器地址栏里的链接，粘贴到“网页文章”入口。

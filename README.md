@@ -70,6 +70,8 @@ http://localhost:4173
 
 On macOS, you can also double-click `Start-Everything-Markdown.command`.
 
+The desktop launcher can use the included icon assets in `assets/app-icon.icns` and `assets/app-icon.svg`.
+
 ## Inputs
 
 Web pages: copy the URL from the browser address bar and paste it into the web-page input.
