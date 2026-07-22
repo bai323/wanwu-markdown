@@ -65,12 +65,20 @@ describe('万物 Markdown 对话工作台', () => {
 
   it('默认界面精简，把专业设置收进高级选项', async () => {
     const html = await readFile('public/index.html', 'utf8');
+    const script = await readFile('public/app.js', 'utf8');
 
     assert.match(html, /一键生成 Markdown、美观报告和结构化资产/);
+    assert.match(html, /data-i18n="quick\.title"/);
+    assert.match(html, /先选内容来源/);
+    assert.match(html, /再点采集/);
+    assert.match(html, /最后存入 Obsidian/);
     assert.match(html, /高级设置/);
     assert.match(html, /data-source-panel="web"[\s\S]*<details class="advanced-options">[\s\S]*适配器/);
     assert.match(html, /data-source-panel="ai"[\s\S]*<details class="advanced-options">[\s\S]*大模型来源/);
     assert.match(html, /<summary data-i18n="obsidian\.title">Obsidian 输出<\/summary>/);
+    assert.doesNotMatch(html, /download-app-link/);
+    assert.doesNotMatch(html, /下载 App/);
+    assert.doesNotMatch(script, /download\.app/);
     assert.doesNotMatch(html, /屠夫召回/);
   });
 
@@ -79,8 +87,6 @@ describe('万物 Markdown 对话工作台', () => {
     const script = await readFile('public/app.js', 'utf8');
 
     assert.match(html, /id="language-select"/);
-    assert.match(html, /id="download-app-link"/);
-    assert.match(html, /data-i18n="download\.app"/);
     assert.match(html, /<option value="zh">ZH<\/option>/);
     assert.match(html, /<option value="en">EN<\/option>/);
     assert.match(html, /data-i18n="brand\.tagline"/);
