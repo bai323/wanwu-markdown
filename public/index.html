@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>万物 Markdown</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">M</div>
+          <div>
+            <h1>万物 Markdown</h1>
+            <p>一键整理你有权保存的网页、对话和资料</p>
+          </div>
+        </div>
+
+        <div class="source-switch" role="tablist" aria-label="采集来源">
+          <button class="active" type="button" data-source="web">网页文章</button>
+          <button type="button" data-source="ai">AI 对话</button>
+          <button type="button" data-source="sider">浏览器插件</button>
+          <button type="button" data-source="json">导入文件</button>
+        </div>
+
+        <form id="capture-form" class="control-panel source-panel active" data-source-panel="web">
+          <div class="source-note">
+            <strong>文章 URL 从哪里来</strong>
+            <span>打开微信公众号文章、X 帖文或普通网页，复制浏览器地址栏里的链接，粘贴到下方。</span>
+          </div>
+          <label class="field">
+            <span>文章 URL</span>
+            <input id="url-input" name="url" type="url" placeholder="https://mp.weixin.qq.com/s/... 或 https://x.com/.../status/..." />
+          </label>
+
+          <details class="advanced-options">
+            <summary>高级设置</summary>
+            <label class="field">
+              <span>适配器</span>
+              <select id="adapter-select" name="adapter">
+                <option value="auto">自动</option>
+                <option value="wechat-article">微信公众号文章</option>
+                <option value="x-article">X 文章 / 帖文</option>
+                <option value="sider-share">Sider 分享页</option>
+                <option value="generic-page">普通网页</option>
+              </select>
+            </label>
+
+            <div class="toggle-list">
+              <label><input id="save-assets" type="checkbox" checked /> 保存图片</label>
+              <label><input id="include-process" type="checkbox" checked /> 过程 / 工具</label>
+              <label><input id="visible-browser" type="checkbox" /> 显示浏览器</label>
+            </div>
+          </details>
+
+          <button class="primary-button" type="submit"><span aria-hidden="true">↓</span>开始采集</button>
+        </form>
+
+        <form id="ai-form" class="control-panel source-panel" data-source-panel="ai">
+          <div class="source-note">
+            <strong>AI 对话 URL 怎么拿</strong>
+            <span>Claude、ChatGPT、Gemini、Codex 网页对话：打开目标对话后，复制浏览器地址栏里的链接。想免 URL：浏览器插件可以直接读取 Sider；Claude、ChatGPT、Codex 这类云端对话需要先打开网页、使用官方导出或授权 API。</span>
+          </div>
+          <label class="field">
+            <span>对话页面 URL</span>
+            <input id="ai-url-input" name="url" type="url" placeholder="https://claude.ai/chat/... 或 https://chatgpt.com/..." />
+          </label>
+
+          <details class="advanced-options">
+            <summary>高级设置</summary>
+            <label class="field">
+              <span>大模型来源</span>
+              <select id="ai-adapter-select" name="adapter">
+                <option value="auto">自动</option>
+                <option value="claude-chat">Claude 对话</option>
+                <option value="codex-chat">Codex 对话</option>
+                <option value="chatgpt-chat">ChatGPT 对话</option>
+                <option value="gemini-chat">Gemini 对话</option>
+                <option value="generic-llm-chat">其他大模型对话</option>
+                <option value="generic-chat">通用对话</option>
+              </select>
+            </label>
+
+            <div class="toggle-list">
+              <label><input id="ai-save-assets" type="checkbox" checked /> 保存图片</label>
+              <label><input id="ai-include-process" type="checkbox" checked /> 过程 / 工具</label>
+              <label><input id="ai-visible-browser" type="checkbox" /> 显示浏览器</label>
+            </div>
+          </details>
+
+          <button class="primary-button" type="submit"><span aria-hidden="true">↓</span>采集 AI 对话</button>
+        </form>
+
+        <form id="sider-form" class="control-panel source-panel" data-source-panel="sider">
+          <div class="source-note">
+            <strong>浏览器插件</strong>
+            <span>当前支持：Sider 插件。Sider 插件不用 URL，先在 Chrome 的 Sider 中打开目标对话，再点击下方“重新检测”。</span>
+          </div>
+          <label class="field">
+            <span>Chrome 配置</span>
+            <select id="profile-select"><option value="">扫描中</option></select>
+          </label>
+          <button id="detect-sider-button" class="secondary-button" type="button"><span aria-hidden="true">↻</span>重新检测当前对话</button>
+          <section id="detected-chat" class="detected-chat" aria-live="polite">
+            <span>正在检测</span>
+            <strong>等待读取 Sider 当前对话</strong>
+          </section>
+          <label class="field">
+            <span>目标对话</span>
+            <select id="sider-chat-select"><option value="">等待检测</option></select>
+          </label>
+          <details class="advanced-options">
+            <summary>高级：手工输入会话 ID</summary>
+            <label class="field">
+              <span>会话 ID</span>
+              <input id="chat-id-input" type="text" autocomplete="off" placeholder="通常无需填写" />
+            </label>
+          </details>
+          <button class="primary-button" type="submit"><span aria-hidden="true">↺</span>恢复所选对话</button>
+        </form>
+
+        <form id="json-form" class="control-panel source-panel" data-source-panel="json">
+          <div class="source-note">
+            <strong>导入文件是什么场景</strong>
+            <span>不用先理解 JSON，可以把它理解成“可恢复的存档文件”。适合导入历史采集结果、别人给你的结构化对话或开发者数据，例如 conversation.graph.json；训练标注数据通常看 dataset.jsonl。</span>
+          </div>
+          <label class="file-picker" for="json-file-input">
+            <span class="file-picker-icon" aria-hidden="true">＋</span>
+            <strong id="json-file-name">选择导入文件</strong>
+            <small>支持 JSON、messages 与 conversation graph</small>
+          </label>
+          <input id="json-file-input" class="visually-hidden" type="file" accept="application/json,.json" />
+          <button class="primary-button" type="submit"><span aria-hidden="true">↑</span>导入文件</button>
+        </form>
+
+        <section class="run-info" aria-label="运行信息">
+          <div><span>状态</span><strong id="status-text">待处理</strong></div>
+          <div><span>类型</span><strong id="kind-text">-</strong></div>
+          <div><span>消息 / 块</span><strong id="block-count">0</strong></div>
+          <div><span>分叉点</span><strong id="branch-count">0</strong></div>
+        </section>
+
+        <details class="obsidian-panel" aria-label="Obsidian 输出">
+          <summary>Obsidian 输出</summary>
+          <div class="obsidian-body">
+            <button id="refresh-vaults-button" class="text-button" type="button">刷新 Vault</button>
+            <label class="field">
+              <span>已检测 Vault</span>
+              <select id="obsidian-vault-select"><option value="">扫描中</option></select>
+            </label>
+            <label class="field">
+              <span>仓库路径</span>
+              <input id="obsidian-vault-path" type="text" autocomplete="off" placeholder="/Users/你/Documents/Obsidian" />
+            </label>
+            <label class="field">
+              <span>保存目录</span>
+              <input id="obsidian-folder" type="text" value="万物Markdown/采集资产" />
+            </label>
+            <div class="toggle-list compact">
+              <label><input id="obsidian-include-json" type="checkbox" /> JSON</label>
+              <label><input id="obsidian-include-dataset" type="checkbox" checked /> JSONL</label>
+              <label><input id="obsidian-include-report" type="checkbox" checked /> 分支报告</label>
+            </div>
+            <button id="obsidian-export-button" class="primary-button" type="button" disabled><span aria-hidden="true">↗</span>存入 Obsidian</button>
+          </div>
+        </details>
+      </aside>
+
+      <section class="workspace">
+        <header class="workspace-head">
+          <nav class="tabs" aria-label="结果视图">
+            <button class="tab active" type="button" data-tab="graph">分支</button>
+            <button class="tab" type="button" data-tab="report">报告</button>
+            <button class="tab" type="button" data-tab="markdown">Markdown</button>
+            <button class="tab" type="button" data-tab="json">结构数据</button>
+            <button class="tab" type="button" data-tab="annotate">标注</button>
+            <button class="tab" type="button" data-tab="dataset">训练数据</button>
+          </nav>
+
+          <div class="toolbar">
+            <div id="file-output" class="file-output">暂无输出文件</div>
+            <div class="toolbar-actions">
+              <button id="report-button" class="report-button" type="button" title="生成并预览 HTML 分支报告" disabled>
+                <span aria-hidden="true">↧</span><span>生成分支报告</span>
+              </button>
+              <button id="copy-button" class="icon-button" type="button" title="复制当前内容">
+                <span aria-hidden="true">⧉</span><span class="visually-hidden">复制</span>
+              </button>
+              <button id="download-button" class="icon-button" type="button" title="下载当前内容">
+                <span aria-hidden="true">↓</span><span class="visually-hidden">下载</span>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <section id="graph-panel" class="panel active">
+          <div id="graph-empty" class="empty-state">
+            <strong>尚未载入对话图</strong>
+            <span>读取浏览器插件会话、网页链接或导入文件</span>
+          </div>
+          <div id="graph-workbench" class="graph-workbench" hidden>
+            <section id="graph-summary" class="graph-summary"></section>
+            <section id="model-legend" class="model-legend" aria-label="模型图例"></section>
+            <div class="graph-mode-switch" role="tablist" aria-label="对话图视图">
+              <button class="active" type="button" data-graph-mode="branches">分支对比</button>
+              <button type="button" data-graph-mode="mainline">当前主分支</button>
+            </div>
+            <section id="branches-view" class="graph-view active">
+              <aside id="branch-list" class="branch-list"></aside>
+              <article id="branch-comparison" class="branch-comparison"></article>
+            </section>
+            <section id="mainline-view" class="graph-view">
+              <div id="mainline-list" class="mainline-list"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="report-panel" class="panel">
+          <iframe id="report-preview" class="report-preview" title="对话分支报告"></iframe>
+        </section>
+
+        <section id="markdown-panel" class="panel">
+          <textarea id="markdown-output" spellcheck="false" placeholder="采集结果会出现在这里"></textarea>
+        </section>
+
+        <section id="json-panel" class="panel">
+          <textarea id="json-output" spellcheck="false"></textarea>
+        </section>
+
+        <section id="annotate-panel" class="panel">
+          <div id="annotation-list" class="annotation-list"></div>
+        </section>
+
+        <section id="dataset-panel" class="panel">
+          <textarea id="jsonl-output" spellcheck="false"></textarea>
+        </section>
+      </section>
+    </main>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
