@@ -142,6 +142,7 @@ export function browserExtractPage(options = {}) {
     if (/(chatgpt\.com|chat\.openai\.com)/i.test(normalizedUrl) && (title.includes('codex') || /\/codex\b/i.test(normalizedUrl))) return 'codex-chat';
     if (/(chatgpt\.com|chat\.openai\.com)/i.test(sourceUrl) || hints.hasChatGptMessages) return 'chatgpt-chat';
     if (/gemini\.google\.com/i.test(sourceUrl) || hints.hasGeminiMessages) return 'gemini-chat';
+    if (/kimi\.com\/chat\//i.test(sourceUrl) || hints.hasKimiMessages) return 'kimi-chat';
     if ((hints.messageCount || 0) >= 2 || hints.hasChatLikeStructure) return 'generic-chat';
     return 'generic-page';
   }
@@ -220,6 +221,9 @@ export function browserExtractPage(options = {}) {
       '[data-testid*="message"]',
       '[data-is-streaming]',
       '[class*="font-claude-message"]',
+      '[class*="chat-message"]',
+      '[class*="message-item"]',
+      '[class*="segment-content"]',
       '[class*="message"]',
       'article'
     ].join(', ');
@@ -240,7 +244,7 @@ export function browserExtractPage(options = {}) {
         node.getAttribute('aria-label'),
         node.className
       ].join(' ');
-      const role = /user|human|request|prompt|you/i.test(roleHint) ? 'user' : /assistant|model|answer|response|claude|gpt|gemini|codex/i.test(roleHint) ? 'assistant' : index % 2 === 0 ? 'user' : 'assistant';
+      const role = /user|human|request|prompt|you|question/i.test(roleHint) ? 'user' : /assistant|model|answer|response|claude|gpt|gemini|codex|kimi/i.test(roleHint) ? 'assistant' : index % 2 === 0 ? 'user' : 'assistant';
       return {
         id: `block-${index + 1}`,
         type: 'message',
@@ -266,6 +270,7 @@ export function browserExtractPage(options = {}) {
     if (adapter === 'codex-chat') return 'Codex';
     if (adapter === 'chatgpt-chat') return 'ChatGPT';
     if (adapter === 'gemini-chat') return 'Gemini';
+    if (adapter === 'kimi-chat') return 'Kimi';
     return '大模型';
   }
 
@@ -333,11 +338,12 @@ export function browserExtractPage(options = {}) {
     hasClaudeMessages: Boolean(document.querySelector('[class*="font-claude-message"], [data-testid*="claude"]')),
     hasChatGptMessages: Boolean(document.querySelector('[data-message-author-role], [data-testid*="conversation-turn"]')),
     hasGeminiMessages: Boolean(document.querySelector('[data-test-id*="conversation"], message-content')),
-    messageCount: document.querySelectorAll('[data-message-author-role], [data-testid*="conversation-turn"], [class*="message"], [class*="font-claude-message"]').length,
+    hasKimiMessages: Boolean(document.querySelector('[class*="chat-message"], [class*="message-item"], [class*="segment-content"], [class*="markdown"]')),
+    messageCount: document.querySelectorAll('[data-message-author-role], [data-testid*="conversation-turn"], [class*="message"], [class*="font-claude-message"], [class*="segment-content"]').length,
     title: document.title
   };
   const adapter = choose(hints);
-  const llmAdapters = ['claude-chat', 'codex-chat', 'chatgpt-chat', 'gemini-chat', 'generic-llm-chat'];
+  const llmAdapters = ['claude-chat', 'codex-chat', 'chatgpt-chat', 'gemini-chat', 'kimi-chat', 'generic-llm-chat'];
   const blocks = adapter === 'sider-share'
     ? extractSider()
     : adapter === 'wechat-article'
@@ -355,7 +361,7 @@ export function browserExtractPage(options = {}) {
     title: pageTitle,
     sourceUrl,
     adapter,
-    kind: ['sider-share', 'generic-chat', 'claude-chat', 'codex-chat', 'chatgpt-chat', 'gemini-chat', 'generic-llm-chat'].includes(adapter) ? 'conversation' : 'webpage',
+    kind: ['sider-share', 'generic-chat', 'claude-chat', 'codex-chat', 'chatgpt-chat', 'gemini-chat', 'kimi-chat', 'generic-llm-chat'].includes(adapter) ? 'conversation' : 'webpage',
     metadata: {
       userAgent: navigator.userAgent,
       viewport: { width: innerWidth, height: innerHeight },

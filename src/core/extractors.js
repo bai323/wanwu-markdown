@@ -9,6 +9,7 @@ export const ADAPTERS = [
   'codex-chat',
   'chatgpt-chat',
   'gemini-chat',
+  'kimi-chat',
   'generic-llm-chat'
 ];
 
@@ -48,6 +49,10 @@ export function chooseAdapter({ requested = 'auto', url = '', hints = {} } = {})
     return 'gemini-chat';
   }
 
+  if (/kimi\.com\/chat\//i.test(normalizedUrl) || hints.hasKimiMessages) {
+    return 'kimi-chat';
+  }
+
   if ((hints.messageCount || 0) >= 2 || hints.hasChatLikeStructure) {
     return 'generic-chat';
   }
@@ -68,7 +73,7 @@ export function sanitizeFilename(value, fallback = 'capture') {
 }
 
 export function inferKind(adapter) {
-  return ['sider-share', 'generic-chat', 'claude-chat', 'codex-chat', 'chatgpt-chat', 'gemini-chat', 'generic-llm-chat'].includes(adapter)
+  return ['sider-share', 'generic-chat', 'claude-chat', 'codex-chat', 'chatgpt-chat', 'gemini-chat', 'kimi-chat', 'generic-llm-chat'].includes(adapter)
     ? 'conversation'
     : 'webpage';
 }

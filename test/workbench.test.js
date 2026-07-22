@@ -18,6 +18,7 @@ describe('万物 Markdown 对话工作台', () => {
     assert.match(html, /value="x-article"/);
     assert.match(html, /value="claude-chat"/);
     assert.match(html, /value="codex-chat"/);
+    assert.match(html, /value="kimi-chat"/);
     assert.match(html, /id="profile-select"/);
     assert.match(html, /id="sider-chat-select"/);
     assert.match(html, /id="detect-sider-button"/);
@@ -50,11 +51,10 @@ describe('万物 Markdown 对话工作台', () => {
     assert.match(html, />结构数据</);
     assert.match(html, />训练数据</);
     assert.match(html, /复制浏览器地址栏里的链接/);
-    assert.match(html, /Claude、ChatGPT、Gemini/);
+    assert.match(html, /Claude、ChatGPT、Gemini、Kimi/);
     assert.match(html, /Codex 网页对话/);
-    assert.match(html, /想免 URL/);
-    assert.match(html, /浏览器插件可以直接读取 Sider/);
-    assert.match(html, /Claude、ChatGPT、Codex 这类云端对话/);
+    assert.match(html, /私有对话需要登录态/);
+    assert.match(html, /打开采集窗口/);
     assert.match(html, /Sider 插件不用 URL/);
     assert.match(html, /不用先理解 JSON/);
     assert.match(html, /可以把它理解成“可恢复的存档文件”/);
@@ -106,6 +106,7 @@ describe('万物 Markdown 对话工作台', () => {
     assert.match(script, /EverythingMarkdown\/captures/);
     assert.match(script, /Web pages/);
     assert.match(script, /Capture AI chat/);
+    assert.match(script, /Kimi chat/);
     assert.match(script, /localStorage\.setItem\('wanwu-language'/);
   });
 
@@ -154,5 +155,12 @@ describe('万物 Markdown 对话工作台', () => {
     assert.doesNotMatch(startScript, /\nopen http:\/\/localhost:4173/);
     assert.match(zhScript, /--app=http:\/\/localhost:4173/);
     assert.doesNotMatch(zhScript, /\nopen http:\/\/localhost:4173/);
+  });
+
+  it('本地 App 静态资源禁用缓存，避免旧界面残留', async () => {
+    const server = await readFile('src/server.js', 'utf8');
+
+    assert.match(server, /cache-control/);
+    assert.match(server, /no-store/);
   });
 });

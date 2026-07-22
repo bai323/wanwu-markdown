@@ -64,6 +64,14 @@ describe('采集适配器选择', () => {
       }),
       'codex-chat'
     );
+    assert.equal(
+      chooseAdapter({
+        requested: 'auto',
+        url: 'https://www.kimi.com/chat/19f73223-8b02-8788-8000-095a382e32bf?chat_enter_method=history',
+        hints: {}
+      }),
+      'kimi-chat'
+    );
   });
 
   it('生成安全文件名，避免路径穿越和控制字符', () => {

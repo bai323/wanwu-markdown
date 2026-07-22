@@ -97,7 +97,10 @@ const server = createServer(async (req, res) => {
     if (req.method === 'GET') {
       const filePath = safePublicPath(req.url === '/' ? '/index.html' : req.url);
       const data = await readFile(filePath);
-      res.writeHead(200, { 'content-type': MIME[extname(filePath)] || 'application/octet-stream' });
+      res.writeHead(200, {
+        'content-type': MIME[extname(filePath)] || 'application/octet-stream',
+        'cache-control': 'no-store'
+      });
       return res.end(data);
     }
 
