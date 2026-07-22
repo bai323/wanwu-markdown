@@ -14,41 +14,22 @@
           <div class="brand-copy">
             <div class="brand-row">
               <h1 data-i18n="brand.title">万物 Markdown</h1>
-              <label class="language-switch">
-                <span class="visually-hidden">Language</span>
-                <select id="language-select" aria-label="Language">
-                  <option value="zh">ZH</option>
-                  <option value="en">EN</option>
-                </select>
-              </label>
+              <div class="app-actions">
+                <label class="language-switch">
+                  <span class="visually-hidden">Language</span>
+                  <select id="language-select" aria-label="Language">
+                    <option value="zh">ZH</option>
+                    <option value="en">EN</option>
+                  </select>
+                </label>
+                <button id="settings-button" class="icon-button small" type="button" title="设置" aria-controls="settings-panel" aria-expanded="false">
+                  <span aria-hidden="true">⚙</span><span class="visually-hidden" data-i18n="settings.open">设置</span>
+                </button>
+              </div>
             </div>
             <p data-i18n="brand.tagline">一键生成 Markdown、美观报告和结构化资产</p>
           </div>
         </div>
-
-        <section class="quick-start" aria-label="新手开始">
-          <strong data-i18n="quick.title">新手三步</strong>
-          <ol>
-            <li>
-              <span aria-hidden="true">1</span>
-              <p><b data-i18n="quick.source">先选内容来源</b><small data-i18n="quick.sourceText">网页、AI 对话、浏览器插件或导入文件。</small></p>
-            </li>
-            <li>
-              <span aria-hidden="true">2</span>
-              <p><b data-i18n="quick.capture">再点采集</b><small data-i18n="quick.captureText">需要登录或滚动时，用打开采集窗口。</small></p>
-            </li>
-            <li>
-              <span aria-hidden="true">3</span>
-              <p><b data-i18n="quick.obsidian">最后存入 Obsidian</b><small data-i18n="quick.obsidianText">生成 Markdown、报告和资产包。</small></p>
-            </li>
-          </ol>
-        </section>
-
-        <section class="feature-list" aria-label="核心特点">
-          <div><strong data-i18n="feature.assets">沉淀数字资产</strong><span data-i18n="feature.assetsText">把网页和对话保存成自己的资料库。</span></div>
-          <div><strong data-i18n="feature.agent">Agent 优先格式</strong><span data-i18n="feature.agentText">Markdown、JSON、JSONL 都方便继续读取。</span></div>
-          <div><strong data-i18n="feature.report">视觉采集报告</strong><span data-i18n="feature.reportText">长对话分支可以被看见、比较和复盘。</span></div>
-        </section>
 
         <div class="source-switch" role="tablist" aria-label="采集来源">
           <button class="active" type="button" data-source="web" data-i18n="source.web">网页文章</button>
@@ -56,16 +37,6 @@
           <button type="button" data-source="sider" data-i18n="source.plugin">浏览器插件</button>
           <button type="button" data-source="json" data-i18n="source.import">导入文件</button>
         </div>
-
-        <section class="live-capture-panel" aria-label="实时采集">
-          <button id="live-open-button" class="secondary-button" type="button">
-            <span aria-hidden="true">↗</span><span data-i18n="live.open">打开采集窗口</span>
-          </button>
-          <button id="live-capture-button" class="secondary-button" type="button" disabled>
-            <span aria-hidden="true">●</span><span data-i18n="live.capture">采集当前窗口</span>
-          </button>
-          <small data-i18n="live.note">适合需要登录、滚动或等待加载的大模型对话。</small>
-        </section>
 
         <form id="capture-form" class="control-panel source-panel active" data-source-panel="web">
           <div class="source-note">
@@ -76,26 +47,6 @@
             <span data-i18n="web.url">文章 URL</span>
             <input id="url-input" name="url" type="url" placeholder="https://mp.weixin.qq.com/s/... 或 https://x.com/.../status/..." data-i18n-placeholder="web.urlPlaceholder" />
           </label>
-
-          <details class="advanced-options">
-            <summary data-i18n="common.advanced">高级设置</summary>
-            <label class="field">
-              <span data-i18n="web.adapter">适配器</span>
-              <select id="adapter-select" name="adapter">
-                <option value="auto" data-i18n="adapter.auto">自动</option>
-                <option value="wechat-article" data-i18n="adapter.wechat">微信公众号文章</option>
-                <option value="x-article" data-i18n="adapter.x">X 文章 / 帖文</option>
-                <option value="sider-share" data-i18n="adapter.siderShare">Sider 分享页</option>
-                <option value="generic-page" data-i18n="adapter.genericPage">普通网页</option>
-              </select>
-            </label>
-
-            <div class="toggle-list">
-              <label><input id="save-assets" type="checkbox" checked /> <span data-i18n="common.saveAssets">保存图片</span></label>
-              <label><input id="include-process" type="checkbox" checked /> <span data-i18n="common.includeProcess">过程 / 工具</span></label>
-              <label><input id="visible-browser" type="checkbox" /> <span data-i18n="common.visibleBrowser">显示浏览器</span></label>
-            </div>
-          </details>
 
           <button class="primary-button" type="submit"><span aria-hidden="true">↓</span><span data-i18n="web.submit">开始采集</span></button>
         </form>
@@ -109,28 +60,6 @@
             <span data-i18n="ai.url">对话页面 URL</span>
             <input id="ai-url-input" name="url" type="url" placeholder="https://claude.ai/chat/... 或 https://chatgpt.com/..." data-i18n-placeholder="ai.urlPlaceholder" />
           </label>
-
-          <details class="advanced-options">
-            <summary data-i18n="common.advanced">高级设置</summary>
-            <label class="field">
-              <span data-i18n="ai.adapter">大模型来源</span>
-              <select id="ai-adapter-select" name="adapter">
-                <option value="auto" data-i18n="adapter.auto">自动</option>
-                <option value="claude-chat" data-i18n="adapter.claude">Claude 对话</option>
-                <option value="codex-chat" data-i18n="adapter.codex">Codex 对话</option>
-                <option value="chatgpt-chat" data-i18n="adapter.chatgpt">ChatGPT 对话</option>
-                <option value="gemini-chat" data-i18n="adapter.gemini">Gemini 对话</option>
-                <option value="generic-llm-chat" data-i18n="adapter.otherLlm">其他大模型对话</option>
-                <option value="generic-chat" data-i18n="adapter.genericChat">通用对话</option>
-              </select>
-            </label>
-
-            <div class="toggle-list">
-              <label><input id="ai-save-assets" type="checkbox" checked /> <span data-i18n="common.saveAssets">保存图片</span></label>
-              <label><input id="ai-include-process" type="checkbox" checked /> <span data-i18n="common.includeProcess">过程 / 工具</span></label>
-              <label><input id="ai-visible-browser" type="checkbox" /> <span data-i18n="common.visibleBrowser">显示浏览器</span></label>
-            </div>
-          </details>
 
           <button class="primary-button" type="submit"><span aria-hidden="true">↓</span><span data-i18n="ai.submit">采集 AI 对话</span></button>
         </form>
@@ -153,13 +82,7 @@
             <span data-i18n="plugin.target">目标对话</span>
             <select id="sider-chat-select"><option value="">等待检测</option></select>
           </label>
-          <details class="advanced-options">
-            <summary data-i18n="plugin.manual">高级：手工输入会话 ID</summary>
-            <label class="field">
-              <span data-i18n="plugin.chatId">会话 ID</span>
-              <input id="chat-id-input" type="text" autocomplete="off" placeholder="通常无需填写" data-i18n-placeholder="plugin.chatIdPlaceholder" />
-            </label>
-          </details>
+          <input id="chat-id-input" class="visually-hidden" type="text" autocomplete="off" />
           <button class="primary-button" type="submit"><span aria-hidden="true">↺</span><span data-i18n="plugin.submit">恢复所选对话</span></button>
         </form>
 
@@ -184,8 +107,8 @@
           <div><span data-i18n="status.branches">分叉点</span><strong id="branch-count">0</strong></div>
         </section>
 
-        <details class="obsidian-panel" aria-label="Obsidian 输出">
-          <summary data-i18n="obsidian.title">Obsidian 输出</summary>
+        <section class="obsidian-panel" aria-label="Obsidian 输出">
+          <h2 data-i18n="obsidian.title">Obsidian 输出</h2>
           <div class="obsidian-body">
             <button id="refresh-vaults-button" class="text-button" type="button" data-i18n="obsidian.refresh">刷新 Vault</button>
             <label class="field">
@@ -207,7 +130,64 @@
             </div>
             <button id="obsidian-export-button" class="primary-button" type="button" disabled><span aria-hidden="true">↗</span><span data-i18n="obsidian.submit">存入 Obsidian</span></button>
           </div>
-        </details>
+        </section>
+
+        <aside id="settings-panel" class="settings-panel" hidden>
+          <header>
+            <strong data-i18n="settings.title">后台设置</strong>
+            <button id="settings-close-button" class="icon-button small" type="button" title="关闭设置">
+              <span aria-hidden="true">×</span><span class="visually-hidden" data-i18n="settings.close">关闭设置</span>
+            </button>
+          </header>
+
+          <section class="settings-section">
+            <h3 data-i18n="common.advanced">高级设置</h3>
+            <label class="field">
+              <span data-i18n="web.adapter">网页适配器</span>
+              <select id="adapter-select" name="adapter">
+                <option value="auto" data-i18n="adapter.auto">自动</option>
+                <option value="wechat-article" data-i18n="adapter.wechat">微信公众号文章</option>
+                <option value="x-article" data-i18n="adapter.x">X 文章 / 帖文</option>
+                <option value="sider-share" data-i18n="adapter.siderShare">Sider 分享页</option>
+                <option value="generic-page" data-i18n="adapter.genericPage">普通网页</option>
+              </select>
+            </label>
+            <label class="field">
+              <span data-i18n="ai.adapter">大模型来源</span>
+              <select id="ai-adapter-select" name="adapter">
+                <option value="auto" data-i18n="adapter.auto">自动</option>
+                <option value="claude-chat" data-i18n="adapter.claude">Claude 对话</option>
+                <option value="codex-chat" data-i18n="adapter.codex">Codex 对话</option>
+                <option value="chatgpt-chat" data-i18n="adapter.chatgpt">ChatGPT 对话</option>
+                <option value="gemini-chat" data-i18n="adapter.gemini">Gemini 对话</option>
+                <option value="generic-llm-chat" data-i18n="adapter.otherLlm">其他大模型对话</option>
+                <option value="generic-chat" data-i18n="adapter.genericChat">通用对话</option>
+              </select>
+            </label>
+            <div class="toggle-list">
+              <label><input id="save-assets" type="checkbox" checked /> <span data-i18n="common.saveAssets">保存图片</span></label>
+              <label><input id="include-process" type="checkbox" checked /> <span data-i18n="common.includeProcess">过程 / 工具</span></label>
+              <label><input id="visible-browser" type="checkbox" /> <span data-i18n="common.visibleBrowser">显示浏览器</span></label>
+              <label><input id="ai-save-assets" type="checkbox" checked /> <span data-i18n="common.aiSaveAssets">AI 对话保存图片</span></label>
+              <label><input id="ai-include-process" type="checkbox" checked /> <span data-i18n="common.aiIncludeProcess">AI 对话保留过程</span></label>
+              <label><input id="ai-visible-browser" type="checkbox" /> <span data-i18n="common.aiVisibleBrowser">AI 对话显示浏览器</span></label>
+            </div>
+          </section>
+
+          <section class="settings-section">
+            <h3 data-i18n="live.title">实验功能</h3>
+            <p data-i18n="live.warning">“打开采集窗口”会启动独立浏览器会话。如果一直转圈，请先用普通采集或浏览器插件。</p>
+            <div class="live-actions">
+              <button id="live-open-button" class="secondary-button" type="button">
+                <span aria-hidden="true">↗</span><span data-i18n="live.open">打开采集窗口</span>
+              </button>
+              <button id="live-capture-button" class="secondary-button" type="button" disabled>
+                <span aria-hidden="true">●</span><span data-i18n="live.capture">采集当前窗口</span>
+              </button>
+            </div>
+            <small data-i18n="live.note">适合需要登录、滚动或等待加载的大模型对话。</small>
+          </section>
+        </aside>
       </aside>
 
       <section class="workspace">
@@ -277,6 +257,13 @@
         </section>
 
         <section id="annotate-panel" class="panel">
+          <div class="annotation-toolbar">
+            <div>
+              <strong data-i18n="annotate.title">智能标注</strong>
+              <span data-i18n="annotate.note">AI 辅助生成初稿标签，你只需要复核关键样本。</span>
+            </div>
+            <button id="auto-label-button" class="secondary-button" type="button" disabled data-i18n="annotate.auto">AI 生成标注初稿</button>
+          </div>
           <div id="annotation-list" class="annotation-list"></div>
         </section>
 

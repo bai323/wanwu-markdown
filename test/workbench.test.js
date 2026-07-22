@@ -63,19 +63,25 @@ describe('万物 Markdown 对话工作台', () => {
     assert.match(html, /dataset\.jsonl/);
   });
 
-  it('默认界面精简，把专业设置收进高级选项', async () => {
+  it('默认界面像本地 App，主流程只保留采集与保存', async () => {
     const html = await readFile('public/index.html', 'utf8');
     const script = await readFile('public/app.js', 'utf8');
 
     assert.match(html, /一键生成 Markdown、美观报告和结构化资产/);
-    assert.match(html, /data-i18n="quick\.title"/);
-    assert.match(html, /先选内容来源/);
-    assert.match(html, /再点采集/);
-    assert.match(html, /最后存入 Obsidian/);
-    assert.match(html, /高级设置/);
-    assert.match(html, /data-source-panel="web"[\s\S]*<details class="advanced-options">[\s\S]*适配器/);
-    assert.match(html, /data-source-panel="ai"[\s\S]*<details class="advanced-options">[\s\S]*大模型来源/);
-    assert.match(html, /<summary data-i18n="obsidian\.title">Obsidian 输出<\/summary>/);
+    assert.match(html, /class="app-actions"/);
+    assert.match(html, /id="settings-button"/);
+    assert.match(html, /id="settings-panel"/);
+    assert.match(html, /data-i18n="settings\.title"/);
+    assert.match(html, /智能标注/);
+    assert.match(html, /AI 辅助生成初稿标签/);
+    assert.match(html, /data-source-panel="web"[\s\S]*文章 URL[\s\S]*开始采集/);
+    assert.match(html, /data-source-panel="ai"[\s\S]*对话页面 URL[\s\S]*采集 AI 对话/);
+    assert.match(html, /class="settings-panel"[\s\S]*data-i18n="common\.advanced"/);
+    assert.doesNotMatch(html, /<section class="quick-start"/);
+    assert.doesNotMatch(html, /<section class="feature-list"/);
+    assert.doesNotMatch(html, /<section class="live-capture-panel"/);
+    assert.doesNotMatch(html, /data-source-panel="web"[\s\S]*<details class="advanced-options">[\s\S]*适配器/);
+    assert.doesNotMatch(html, /data-source-panel="ai"[\s\S]*<details class="advanced-options">[\s\S]*大模型来源/);
     assert.doesNotMatch(html, /download-app-link/);
     assert.doesNotMatch(html, /下载 App/);
     assert.doesNotMatch(script, /download\.app/);
@@ -94,9 +100,9 @@ describe('万物 Markdown 对话工作台', () => {
     assert.match(script, /Markdown, visual reports, and agent-ready archives/);
     assert.match(script, /Markdown、美观报告和结构化资产/);
     assert.doesNotMatch(script, /Wanwu Markdown/);
-    assert.match(script, /Personal digital assets/);
-    assert.match(script, /Agent-ready Markdown/);
-    assert.match(script, /Visual branch reports/);
+    assert.match(script, /Background settings/);
+    assert.match(script, /Experimental/);
+    assert.match(script, /Draft labels with AI/);
     assert.match(script, /EverythingMarkdown\/captures/);
     assert.match(script, /Web pages/);
     assert.match(script, /Capture AI chat/);
@@ -128,10 +134,25 @@ describe('万物 Markdown 对话工作台', () => {
     assert.match(html, /id="live-capture-button"/);
     assert.match(html, /data-i18n="live\.open"/);
     assert.match(html, /data-i18n="live\.capture"/);
+    assert.match(html, /实验功能/);
+    assert.match(html, /如果一直转圈，请先用普通采集或浏览器插件/);
     assert.match(html, /data-i18n="tabs\.bundle"/);
     assert.match(script, /conversation asset bundle/i);
     assert.match(script, /\/api\/live\/open/);
     assert.match(script, /\/api\/live\/capture/);
+    assert.match(script, /AbortController/);
+    assert.match(script, /打开超时，请先用普通采集或浏览器插件/);
     assert.match(script, /manifest\.json/);
+  });
+
+  it('macOS 启动脚本使用独立 App 窗口打开本地工作台', async () => {
+    const startScript = await readFile('Start-Everything-Markdown.command', 'utf8');
+    const zhScript = await readFile('启动万物Markdown.command', 'utf8');
+
+    assert.match(startScript, /--app=http:\/\/localhost:4173/);
+    assert.match(startScript, /Google Chrome\.app/);
+    assert.doesNotMatch(startScript, /\nopen http:\/\/localhost:4173/);
+    assert.match(zhScript, /--app=http:\/\/localhost:4173/);
+    assert.doesNotMatch(zhScript, /\nopen http:\/\/localhost:4173/);
   });
 });

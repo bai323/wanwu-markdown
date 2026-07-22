@@ -34,4 +34,8 @@ if ! curl -fsS --max-time 2 http://localhost:4173/api/health >/dev/null 2>&1; th
   done
 fi
 
-open http://localhost:4173
+if [ -x "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" ]; then
+  open -na "Google Chrome" --args --app=http://localhost:4173 --window-size=1440,1000
+else
+  open http://localhost:4173
+fi
