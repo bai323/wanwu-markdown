@@ -1,20 +1,20 @@
 # Everything Markdown
 
-Turn web pages, AI chats, and browser-plugin conversations into Markdown.
+Turn web pages, AI chats, and browser-plugin conversations into Markdown, visual reports, and structured assets.
 
-Everything to Markdown, locally.
+Markdown, visual reports, and agent-ready archives.
 
 [Download the app](https://github.com/bai323/wanwu-markdown/releases/latest) · [Chinese README](README.zh-CN.md) · [Beginner guide](docs/getting-started.en.md) · [Real examples](docs/examples.en.md)
 
 ![Everything Markdown product screenshot](docs/product-screenshot.png)
 
-Everything Markdown is a local-first workbench. It does not try to become your new knowledge base. It does one small job: take content you are allowed to keep and turn it into readable, traceable files.
+Everything Markdown is a local-first workbench. It does not try to become your new knowledge base. It does one small job: take content you are allowed to keep and turn it into readable Markdown, clear reports, and traceable data files.
 
 ## Why This Exists
 
 AI work is becoming branchy, tool-heavy, and hard to revisit. A useful answer is no longer just a block of text. It has source pages, model replies, alternate branches, intermediate reasoning, files, labels, and a path back to the original context.
 
-Everything Markdown turns that mess into a durable local asset.
+Everything Markdown turns that mess into a durable local asset you can read, review, and hand back to agents.
 
 ## Core Ideas
 
