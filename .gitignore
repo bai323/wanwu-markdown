@@ -1,0 +1,12 @@
+node_modules/
+captures/
+.DS_Store
+npm-debug.log*
+Markdown-*
+Sider-*
+sider-share-*
+sider-item*.html
+sider-attachment-*.jpg
+*.log
+.env
+.env.*
