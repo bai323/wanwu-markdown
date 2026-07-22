@@ -28,6 +28,7 @@ describe('GitHub 发布包装', () => {
     assert.match(readme, /visual capture reports/);
     assert.match(readme, /Full-model branch alignment/);
     assert.match(readme, /!\[Real full-model branch alignment report\]\(docs\/cases\/real-model-branch-alignment\.png\)/);
+    assert.match(readme, /assets\/app-icon\.icns/);
 
     assert.match(zhReadme, /# 万物 Markdown/);
     assert.match(zhReadme, /把网页、AI 对话和浏览器插件里的内容整理成 Markdown、美观报告和结构化资产/);
@@ -55,6 +56,9 @@ describe('GitHub 发布包装', () => {
     await access('docs/cases/real-branch-report.zh-CN.svg');
     await access('docs/cases/real-branch-report.en.svg');
     await access('docs/cases/real-model-branch-alignment.png');
+    await access('assets/app-icon.svg');
+    await access('assets/app-icon.png');
+    await access('assets/app-icon.icns');
   });
 
   it('配置 CI 与忽略本地生成材料', async () => {
