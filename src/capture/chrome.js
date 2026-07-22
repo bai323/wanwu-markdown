@@ -9,6 +9,7 @@ import { buildAssetManifest, createCaptureDocument, documentToJsonl, documentToM
 import { sanitizeFilename } from '../core/extractors.js';
 
 const DEFAULT_WAIT_MS = 4500;
+const PRIVATE_CHAT_EMPTY_MESSAGE = '没有读到对话内容。Kimi、Claude、ChatGPT 这类私有对话通常需要登录态：请切到「AI 对话」，在设置里使用「打开采集窗口」，登录并等待消息加载后再点「采集当前窗口」。';
 const liveSessions = new Map();
 
 export async function captureUrl(payload, options = {}) {
@@ -260,6 +261,7 @@ async function capturePageToBundle(page, request, options = {}) {
   try {
     const raw = await evaluateExtractor(client, { ...request, url: page.url || request.url });
     const doc = createCaptureDocument(raw);
+    assertMeaningfulCapture(doc);
 
     if (request.saveAssets) {
       await saveLoadedAssets({ client, doc, runDir });
@@ -287,6 +289,14 @@ async function capturePageToBundle(page, request, options = {}) {
     return { document: doc, markdown, json, jsonl, manifest, files };
   } finally {
     await client.close();
+  }
+}
+
+export function assertMeaningfulCapture(doc) {
+  if (doc.kind === 'conversation' && !doc.blocks.length) {
+    const error = new Error(PRIVATE_CHAT_EMPTY_MESSAGE);
+    error.statusCode = 422;
+    throw error;
   }
 }
 
