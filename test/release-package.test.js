@@ -14,6 +14,10 @@ describe('GitHub 发布包装', () => {
     assert.match(readme, /Wanwu Markdown/);
     assert.match(readme, /Turn web pages, AI chats, and browser-plugin conversations into Markdown/);
     assert.match(readme, /!\[Wanwu Markdown product screenshot\]\(docs\/product-screenshot\.png\)/);
+    assert.match(readme, /\[新手教程\]\(docs\/getting-started\.zh-CN\.md\)/);
+    assert.match(readme, /\[Beginner guide\]\(docs\/getting-started\.en\.md\)/);
+    assert.match(readme, /\[真实使用示例\]\(docs\/examples\.zh-CN\.md\)/);
+    assert.match(readme, /\[Real examples\]\(docs\/examples\.en\.md\)/);
     assert.match(readme, /第一次运行/);
     assert.match(readme, /First run/);
     assert.match(readme, /发布边界/);
@@ -22,6 +26,10 @@ describe('GitHub 发布包装', () => {
     assert.match(privacy, /本地优先/);
     assert.match(checklist, /第一次发布到 GitHub/);
     await access('docs/product-screenshot.png');
+    await access('docs/getting-started.zh-CN.md');
+    await access('docs/getting-started.en.md');
+    await access('docs/examples.zh-CN.md');
+    await access('docs/examples.en.md');
   });
 
   it('配置 CI 与忽略本地生成材料', async () => {

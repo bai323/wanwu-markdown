@@ -10,6 +10,11 @@ Turn web pages, AI chats, and browser-plugin conversations into Markdown.
 
 Wanwu Markdown is a local-first workbench. It does not try to become your new knowledge base. It does one small job: take content you are allowed to keep and turn it into readable, traceable files.
 
+## Start here
+
+- 中文：[新手教程](docs/getting-started.zh-CN.md) / [真实使用示例](docs/examples.zh-CN.md)
+- English: [Beginner guide](docs/getting-started.en.md) / [Real examples](docs/examples.en.md)
+
 ## 中文
 
 ### 适合做什么
