@@ -128,8 +128,8 @@ const I18N = {
     'markdown.placeholder': '采集结果会出现在这里'
   },
   en: {
-    'brand.title': 'Wanwu Markdown',
-    'brand.tagline': 'Turn pages, AI chats, and plugin conversations you can save into Markdown.',
+    'brand.title': 'Everything Markdown',
+    'brand.tagline': 'Everything to Markdown, locally.',
     'source.web': 'Web pages',
     'source.ai': 'AI chats',
     'source.plugin': 'Browser plugin',

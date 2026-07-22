@@ -82,7 +82,9 @@ describe('万物 Markdown 对话工作台', () => {
     assert.match(html, /<option value="zh">中文<\/option>/);
     assert.match(html, /<option value="en">English<\/option>/);
     assert.match(html, /data-i18n="brand\.tagline"/);
-    assert.match(script, /Wanwu Markdown/);
+    assert.match(script, /Everything Markdown/);
+    assert.match(script, /Everything to Markdown, locally/);
+    assert.doesNotMatch(script, /Wanwu Markdown/);
     assert.match(script, /Web pages/);
     assert.match(script, /Capture AI chat/);
     assert.match(script, /localStorage\.setItem\('wanwu-language'/);

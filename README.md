@@ -1,19 +1,33 @@
-# 万物 Markdown / Wanwu Markdown
+# 万物 Markdown / Everything Markdown
 
 把网页、AI 对话和浏览器插件里的内容整理成 Markdown。
 
 Turn web pages, AI chats, and browser-plugin conversations into Markdown.
 
-![Wanwu Markdown product screenshot](docs/product-screenshot.png)
+![Everything Markdown product screenshot](docs/product-screenshot.png)
 
 万物 Markdown 是一个本地工作台。它不试图变成新的知识库，也不替你决定内容该怎么用。它只做一件事：把你有权保存的网页、对话和资料，整理成清楚、可追溯、方便继续处理的文件。
 
-Wanwu Markdown is a local-first workbench. It does not try to become your new knowledge base. It does one small job: take content you are allowed to keep and turn it into readable, traceable files.
+Everything Markdown is a local-first workbench. It does not try to become your new knowledge base. It does one small job: take content you are allowed to keep and turn it into readable, traceable files.
+
+Everything to Markdown, locally.
 
 ## Start here
 
 - 中文：[新手教程](docs/getting-started.zh-CN.md) / [真实使用示例](docs/examples.zh-CN.md)
 - English: [Beginner guide](docs/getting-started.en.md) / [Real examples](docs/examples.en.md)
+
+## Real cases / 真实案例
+
+These public cases use sanitized or simulated content. The workflows are real; private Sider chat text is not uploaded.
+
+这些公开案例使用脱敏或模拟内容。流程是真实的，但不会把私人 Sider 对话原文上传到公开仓库。
+
+![Sider recovery case](docs/cases/sider-recovery.svg)
+
+![Branch report case](docs/cases/branch-report.svg)
+
+![Obsidian export case](docs/cases/obsidian-export.svg)
 
 ## 中文
 
@@ -113,7 +127,7 @@ Import file: you do not need to understand JSON first. Treat it as a recoverable
 
 ### Release boundary
 
-Wanwu Markdown should only process content you are allowed to access and keep. Respect site terms, export rules, copyright, and privacy.
+Everything Markdown should only process content you are allowed to access and keep. Respect site terms, export rules, copyright, and privacy.
 
 This `0.1.0` release is for personal archiving and small-scale research. Do not treat raw output as a production training dataset without deduplication, consent records, privacy review, quality checks, and human sampling.
 
