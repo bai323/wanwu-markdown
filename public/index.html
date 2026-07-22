@@ -17,14 +17,26 @@
               <label class="language-switch">
                 <span class="visually-hidden">Language</span>
                 <select id="language-select" aria-label="Language">
-                  <option value="zh">中文</option>
-                  <option value="en">English</option>
+                  <option value="zh">ZH</option>
+                  <option value="en">EN</option>
                 </select>
               </label>
             </div>
             <p data-i18n="brand.tagline">一键整理你有权保存的网页、对话和资料</p>
           </div>
         </div>
+
+        <a id="download-app-link" class="download-app" href="https://github.com/bai323/wanwu-markdown/releases/latest" target="_blank" rel="noreferrer">
+          <span aria-hidden="true">↓</span>
+          <strong data-i18n="download.app">下载 App</strong>
+          <small data-i18n="download.note">免费开源，本地优先</small>
+        </a>
+
+        <section class="feature-list" aria-label="核心特点">
+          <div><strong data-i18n="feature.assets">沉淀数字资产</strong><span data-i18n="feature.assetsText">把网页和对话保存成自己的资料库。</span></div>
+          <div><strong data-i18n="feature.agent">Agent 优先格式</strong><span data-i18n="feature.agentText">Markdown、JSON、JSONL 都方便继续读取。</span></div>
+          <div><strong data-i18n="feature.report">视觉采集报告</strong><span data-i18n="feature.reportText">长对话分支可以被看见、比较和复盘。</span></div>
+        </section>
 
         <div class="source-switch" role="tablist" aria-label="采集来源">
           <button class="active" type="button" data-source="web" data-i18n="source.web">网页文章</button>
@@ -164,12 +176,12 @@
             </label>
             <label class="field">
               <span data-i18n="obsidian.folder">保存目录</span>
-              <input id="obsidian-folder" type="text" value="万物Markdown/采集资产" />
+              <input id="obsidian-folder" type="text" value="万物Markdown/采集资产" data-i18n-value="obsidian.folderDefault" />
             </label>
             <div class="toggle-list compact">
               <label><input id="obsidian-include-json" type="checkbox" /> JSON</label>
               <label><input id="obsidian-include-dataset" type="checkbox" checked /> JSONL</label>
-              <label><input id="obsidian-include-report" type="checkbox" checked /> 分支报告</label>
+              <label><input id="obsidian-include-report" type="checkbox" checked /> <span data-i18n="obsidian.reportFile">分支报告</span></label>
             </div>
             <button id="obsidian-export-button" class="primary-button" type="button" disabled><span aria-hidden="true">↗</span><span data-i18n="obsidian.submit">存入 Obsidian</span></button>
           </div>
@@ -194,10 +206,10 @@
                 <span aria-hidden="true">↧</span><span data-i18n="toolbar.report">生成分支报告</span>
               </button>
               <button id="copy-button" class="icon-button" type="button" title="复制当前内容">
-                <span aria-hidden="true">⧉</span><span class="visually-hidden">复制</span>
+                <span aria-hidden="true">⧉</span><span class="visually-hidden" data-i18n="toolbar.copy">复制</span>
               </button>
               <button id="download-button" class="icon-button" type="button" title="下载当前内容">
-                <span aria-hidden="true">↓</span><span class="visually-hidden">下载</span>
+                <span aria-hidden="true">↓</span><span class="visually-hidden" data-i18n="toolbar.download">下载</span>
               </button>
             </div>
           </div>

@@ -79,12 +79,18 @@ describe('万物 Markdown 对话工作台', () => {
     const script = await readFile('public/app.js', 'utf8');
 
     assert.match(html, /id="language-select"/);
-    assert.match(html, /<option value="zh">中文<\/option>/);
-    assert.match(html, /<option value="en">English<\/option>/);
+    assert.match(html, /id="download-app-link"/);
+    assert.match(html, /data-i18n="download\.app"/);
+    assert.match(html, /<option value="zh">ZH<\/option>/);
+    assert.match(html, /<option value="en">EN<\/option>/);
     assert.match(html, /data-i18n="brand\.tagline"/);
     assert.match(script, /Everything Markdown/);
     assert.match(script, /Everything to Markdown, locally/);
     assert.doesNotMatch(script, /Wanwu Markdown/);
+    assert.match(script, /Personal digital assets/);
+    assert.match(script, /Agent-ready Markdown/);
+    assert.match(script, /Visual branch reports/);
+    assert.match(script, /EverythingMarkdown\/captures/);
     assert.match(script, /Web pages/);
     assert.match(script, /Capture AI chat/);
     assert.match(script, /localStorage\.setItem\('wanwu-language'/);

@@ -1,16 +1,17 @@
 :root {
   color-scheme: light;
-  --bg: #f5f6f8;
+  --bg: #f7f7fb;
   --surface: #ffffff;
-  --surface-soft: #f9fafb;
-  --text: #17191f;
-  --muted: #667085;
-  --line: #dde2ea;
-  --line-strong: #c9d1dc;
-  --accent: #1f6f5b;
-  --accent-dark: #185744;
-  --focus: rgba(31, 111, 91, 0.2);
-  --shadow: 0 10px 26px rgba(23, 25, 31, 0.07);
+  --surface-soft: #faf9ff;
+  --text: #1f1f29;
+  --muted: #6f6a7c;
+  --line: #ded9ea;
+  --line-strong: #c9c1da;
+  --accent: #7c3aed;
+  --accent-dark: #5b21b6;
+  --accent-soft: #f0e9ff;
+  --focus: rgba(124, 58, 237, 0.2);
+  --shadow: 0 10px 26px rgba(42, 32, 70, 0.08);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
@@ -98,7 +99,7 @@ button {
   width: 42px;
   height: 42px;
   border-radius: 7px;
-  background: var(--text);
+  background: linear-gradient(135deg, #6d28d9, #9f67ff);
   color: #fff;
   font-weight: 800;
 }
@@ -132,13 +133,71 @@ button {
   line-height: 1.45;
 }
 
+.download-app {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 2px 10px;
+  align-items: center;
+  border-radius: 8px;
+  background: var(--accent);
+  padding: 12px 13px;
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 12px 24px rgba(124, 58, 237, 0.2);
+}
+
+.download-app span {
+  grid-row: span 2;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.download-app strong {
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.download-app small {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 11px;
+}
+
+.download-app:hover {
+  background: var(--accent-dark);
+}
+
+.feature-list {
+  display: grid;
+  gap: 8px;
+}
+
+.feature-list div {
+  display: grid;
+  gap: 3px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-soft);
+  padding: 10px 11px;
+}
+
+.feature-list strong {
+  color: var(--text);
+  font-size: 12px;
+}
+
+.feature-list span {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
 .source-switch,
 .graph-mode-switch {
   display: grid;
   gap: 3px;
   border: 1px solid var(--line);
   border-radius: 7px;
-  background: #eef1f4;
+  background: #efedf5;
   padding: 3px;
 }
 
@@ -188,7 +247,7 @@ button {
   gap: 4px;
   border-left: 3px solid var(--accent);
   border-radius: 0 7px 7px 0;
-  background: #f2f7f5;
+  background: var(--accent-soft);
   padding: 10px 11px;
   color: var(--muted);
   font-size: 11px;

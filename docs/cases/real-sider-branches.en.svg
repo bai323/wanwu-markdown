@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="860" viewBox="0 0 1400 860" role="img" aria-label="Real Sider Branch Recovery">
+  <rect width="1400" height="860" fill="#f7f7fb"/>
+  <rect x="58" y="54" width="1284" height="752" rx="24" fill="#ffffff" stroke="#ded9ea"/>
+  <circle cx="110" cy="108" r="24" fill="#7c3aed"/>
+  <text x="110" y="116" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800" fill="#fff">M</text>
+  <text x="154" y="104" font-family="Inter, Arial, sans-serif" font-size="31" font-weight="850" fill="#1f1f29">Real Sider Branch Recovery</text>
+  <text x="154" y="136" font-family="Inter, Arial, sans-serif" font-size="15" fill="#6f6a7c">Built from your real captured Sider conversation. The full private text is not published.</text>
+  <rect x="92" y="184" width="164" height="86" rx="14" fill="#ffffff" stroke="#ded9ea"/>
+  <text x="112" y="218" font-family="Inter, Arial, sans-serif" font-size="14" fill="#6f6a7c">Messages</text>
+  <text x="112" y="252" font-family="Inter, Arial, sans-serif" font-size="31" font-weight="800" fill="#1f1f29">287</text>
+  <rect x="278" y="184" width="164" height="86" rx="14" fill="#ffffff" stroke="#ded9ea"/>
+  <text x="298" y="218" font-family="Inter, Arial, sans-serif" font-size="14" fill="#6f6a7c">Mainline</text>
+  <text x="298" y="252" font-family="Inter, Arial, sans-serif" font-size="31" font-weight="800" fill="#1f1f29">36</text>
+  <rect x="464" y="184" width="164" height="86" rx="14" fill="#ffffff" stroke="#ded9ea"/>
+  <text x="484" y="218" font-family="Inter, Arial, sans-serif" font-size="14" fill="#6f6a7c">Branch msgs</text>
+  <text x="484" y="252" font-family="Inter, Arial, sans-serif" font-size="31" font-weight="800" fill="#1f1f29">251</text>
+  <rect x="650" y="184" width="164" height="86" rx="14" fill="#ffffff" stroke="#ded9ea"/>
+  <text x="670" y="218" font-family="Inter, Arial, sans-serif" font-size="14" fill="#6f6a7c">Forks</text>
+  <text x="670" y="252" font-family="Inter, Arial, sans-serif" font-size="31" font-weight="800" fill="#1f1f29">58</text>
+  <rect x="836" y="184" width="164" height="86" rx="14" fill="#ffffff" stroke="#ded9ea"/>
+  <text x="856" y="218" font-family="Inter, Arial, sans-serif" font-size="14" fill="#6f6a7c">Models</text>
+  <text x="856" y="252" font-family="Inter, Arial, sans-serif" font-size="31" font-weight="800" fill="#1f1f29">15</text>
+  <rect x="1022" y="184" width="164" height="86" rx="14" fill="#ffffff" stroke="#ded9ea"/>
+  <text x="1042" y="218" font-family="Inter, Arial, sans-serif" font-size="14" fill="#6f6a7c">Characters</text>
+  <text x="1042" y="252" font-family="Inter, Arial, sans-serif" font-size="31" font-weight="800" fill="#1f1f29">1.14M</text>
+  <rect x="92" y="318" width="492" height="416" rx="18" fill="#fbfaff" stroke="#ded9ea"/>
+  <text x="126" y="364" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="850" fill="#1f1f29">Why branches matter</text>
+  <foreignObject x="126" y="386" width="420" height="110"><div xmlns="http://www.w3.org/1999/xhtml" style="font-family:Inter,Arial,sans-serif;font-size:15px;line-height:1.55;color:#6f6a7c">Long chats in ChatGPT, Claude, and Sider are rarely a single line. Regeneration, model switching, and follow-up prompts create alternate paths. Everything Markdown recovers those paths as a structure you can compare.</div></foreignObject>
+  <rect x="126" y="542" width="404" height="52" rx="12" fill="#ffffff" stroke="#ded9ea"/>
+  <circle cx="154" cy="568" r="9" fill="#7c3aed"/><text x="178" y="573" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="760" fill="#1f1f29">Personal digital assets</text>
+  <rect x="126" y="610" width="404" height="52" rx="12" fill="#ffffff" stroke="#ded9ea"/>
+  <circle cx="154" cy="636" r="9" fill="#4f46e5"/><text x="178" y="641" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="760" fill="#1f1f29">Agent-readable format</text>
+  <rect x="126" y="678" width="404" height="52" rx="12" fill="#ffffff" stroke="#ded9ea"/>
+  <circle cx="154" cy="704" r="9" fill="#0f766e"/><text x="178" y="709" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="760" fill="#1f1f29">Visual capture reports</text>
+  <rect x="638" y="318" width="670" height="416" rx="18" fill="#ffffff" stroke="#ded9ea"/>
+  <text x="676" y="362" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="850" fill="#1f1f29">Branch map</text>
+  <rect x="676" y="396" width="548" height="56" rx="14" fill="#f0e9ff" stroke="#d7c9ff"/>
+  <text x="704" y="431" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="760" fill="#1f1f29">Parent prompt: evaluate an AI plugin trial framework</text>
+  <line x1="950" y1="452" x2="800" y2="514" stroke="#ded9ea" stroke-width="2"/>
+  <line x1="950" y1="452" x2="950" y2="514" stroke="#ded9ea" stroke-width="2"/>
+  <line x1="950" y1="452" x2="1100" y2="514" stroke="#ded9ea" stroke-width="2"/>
+  <rect x="676" y="514" width="248" height="74" rx="14" fill="#fff" stroke="#ded9ea"/>
+  <text x="704" y="557" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="760" fill="#1f1f29">Path A: business model review</text>
+  <rect x="826" y="628" width="248" height="74" rx="14" fill="#fff" stroke="#ded9ea"/>
+  <text x="854" y="671" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="760" fill="#1f1f29">Path B: product and distribution frame</text>
+  <rect x="1036" y="514" width="248" height="74" rx="14" fill="#fff" stroke="#ded9ea"/>
+  <text x="1064" y="557" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="760" fill="#1f1f29">Path C: investor-style follow-up</text>
+  </svg>

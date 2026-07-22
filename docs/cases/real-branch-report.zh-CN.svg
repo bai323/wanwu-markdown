@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="860" viewBox="0 0 1400 860" role="img" aria-label="视觉分支报告">
+  <rect width="1400" height="860" fill="#f7f7fb"/>
+  <rect x="60" y="54" width="1280" height="752" rx="24" fill="#ffffff" stroke="#ded9ea"/>
+  <text x="104" y="112" font-family="Inter, Arial, sans-serif" font-size="32" font-weight="850" fill="#1f1f29">视觉分支报告</text>
+  <text x="104" y="144" font-family="Inter, Arial, sans-serif" font-size="15" fill="#6f6a7c">把 58 个分叉点和 15 个模型来源变成可扫读、可比较的报告。</text>
+  <rect x="104" y="190" width="510" height="540" rx="18" fill="#fbfaff" stroke="#ded9ea"/>
+  <text x="142" y="238" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="850" fill="#1f1f29">模型分布</text>
+  <text x="142" y="291" font-family="Inter, Arial, sans-serif" font-size="13" fill="#1f1f29">claude-sonnet-4.6</text>
+    <rect x="332" y="276" width="270" height="18" rx="9" fill="#f1eef8"/>
+    <rect x="332" y="276" width="250" height="18" rx="9" fill="#7c3aed" opacity="0.95"/>
+    <text x="618" y="290" font-family="Inter, Arial, sans-serif" font-size="12" fill="#6f6a7c">121</text>
+<text x="142" y="329" font-family="Inter, Arial, sans-serif" font-size="13" fill="#1f1f29">gpt-5.5</text>
+    <rect x="332" y="314" width="270" height="18" rx="9" fill="#f1eef8"/>
+    <rect x="332" y="314" width="112" height="18" rx="9" fill="#4f46e5" opacity="0.95"/>
+    <text x="618" y="328" font-family="Inter, Arial, sans-serif" font-size="12" fill="#6f6a7c">54</text>
+<text x="142" y="367" font-family="Inter, Arial, sans-serif" font-size="13" fill="#1f1f29">claude-opus-4.6</text>
+    <rect x="332" y="352" width="270" height="18" rx="9" fill="#f1eef8"/>
+    <rect x="332" y="352" width="68" height="18" rx="9" fill="#0f766e" opacity="0.72"/>
+    <text x="618" y="366" font-family="Inter, Arial, sans-serif" font-size="12" fill="#6f6a7c">33</text>
+<text x="142" y="405" font-family="Inter, Arial, sans-serif" font-size="13" fill="#1f1f29">claude-opus-4.6-think</text>
+    <rect x="332" y="390" width="270" height="18" rx="9" fill="#f1eef8"/>
+    <rect x="332" y="390" width="43" height="18" rx="9" fill="#0f766e" opacity="0.72"/>
+    <text x="618" y="404" font-family="Inter, Arial, sans-serif" font-size="12" fill="#6f6a7c">21</text>
+<text x="142" y="443" font-family="Inter, Arial, sans-serif" font-size="13" fill="#1f1f29">gemini-3.5-flash</text>
+    <rect x="332" y="428" width="270" height="18" rx="9" fill="#f1eef8"/>
+    <rect x="332" y="428" width="35" height="18" rx="9" fill="#0f766e" opacity="0.72"/>
+    <text x="618" y="442" font-family="Inter, Arial, sans-serif" font-size="12" fill="#6f6a7c">17</text>
+<text x="142" y="481" font-family="Inter, Arial, sans-serif" font-size="13" fill="#1f1f29">gpt-5.5-think</text>
+    <rect x="332" y="466" width="270" height="18" rx="9" fill="#f1eef8"/>
+    <rect x="332" y="466" width="35" height="18" rx="9" fill="#0f766e" opacity="0.72"/>
+    <text x="618" y="480" font-family="Inter, Arial, sans-serif" font-size="12" fill="#6f6a7c">17</text>
+  <rect x="142" y="560" width="400" height="106" rx="16" fill="#fff" stroke="#ded9ea"/>
+  <text x="170" y="598" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="800" fill="#1f1f29">287 messages · 58 forks · 1.14M chars</text>
+  <foreignObject x="170" y="612" width="340" height="46"><div xmlns="http://www.w3.org/1999/xhtml" style="font-family:Inter,Arial,sans-serif;font-size:13px;line-height:1.45;color:#6f6a7c">重点不是保存所有字，而是把长对话的结构、模型和可复盘路径保存下来。</div></foreignObject>
+  <rect x="656" y="190" width="640" height="540" rx="18" fill="#fff" stroke="#ded9ea"/>
+  <text x="694" y="238" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="850" fill="#1f1f29">分支对比视图</text>
+  <rect x="694" y="286" width="172" height="360" rx="16" fill="#fbfaff" stroke="#ded9ea"/>
+  <text x="720" y="326" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="850" fill="#7c3aed">路径 A</text>
+  <text x="720" y="370" font-family="Inter, Arial, sans-serif" font-size="13" fill="#6f6a7c">business model</text>
+  <text x="720" y="410" font-family="Inter, Arial, sans-serif" font-size="13" fill="#6f6a7c">distribution</text>
+  <text x="720" y="450" font-family="Inter, Arial, sans-serif" font-size="13" fill="#6f6a7c">risks</text>
+  <rect x="890" y="286" width="172" height="360" rx="16" fill="#fbfaff" stroke="#ded9ea"/>
+  <text x="916" y="326" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="850" fill="#4f46e5">路径 B</text>
+  <text x="916" y="370" font-family="Inter, Arial, sans-serif" font-size="13" fill="#6f6a7c">product frame</text>
+  <text x="916" y="410" font-family="Inter, Arial, sans-serif" font-size="13" fill="#6f6a7c">API surface</text>
+  <text x="916" y="450" font-family="Inter, Arial, sans-serif" font-size="13" fill="#6f6a7c">agent flow</text>
+  <rect x="1086" y="286" width="172" height="360" rx="16" fill="#fbfaff" stroke="#ded9ea"/>
+  <text x="1112" y="326" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="850" fill="#0f766e">路径 C</text>
+  <text x="1112" y="370" font-family="Inter, Arial, sans-serif" font-size="13" fill="#6f6a7c">investor lens</text>
+  <text x="1112" y="410" font-family="Inter, Arial, sans-serif" font-size="13" fill="#6f6a7c">market timing</text>
+  <text x="1112" y="450" font-family="Inter, Arial, sans-serif" font-size="13" fill="#6f6a7c">next questions</text>
+  </svg>

@@ -38,7 +38,7 @@ Then open:
 http://localhost:4173
 ```
 
-On macOS, you can also double-click `启动万物Markdown.command`. The first run may take longer because dependencies are installed.
+On macOS, you can also double-click `Start-Everything-Markdown.command`. The first run may take longer because dependencies are installed.
 
 ## 4. Choose an input
 
@@ -69,7 +69,7 @@ Open `Obsidian output`, choose or enter your vault path, then click `Save to Obs
 By default, files are written to:
 
 ```text
-万物Markdown/采集资产
+EverythingMarkdown/captures
 ```
 
 ## Common issues

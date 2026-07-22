@@ -4,7 +4,7 @@ These are practical tasks Everything Markdown is currently suited for.
 
 The public case images use sanitized or simulated content. A real Sider conversation is useful for product validation, but private chat text should not be uploaded to a public repository.
 
-![Sider recovery case](cases/sider-recovery.svg)
+![Real Sider branch recovery](cases/real-sider-branches.en.svg)
 
 ## Example 1: Save a web article
 
@@ -59,7 +59,7 @@ Good for: long chats with branches where copy-paste loses structure.
 
 Goal: inspect different reply paths, branch points, and model sources in a long conversation.
 
-![Branch report case](cases/branch-report.svg)
+![Visual branch report](cases/real-branch-report.en.svg)
 
 Steps:
 
@@ -74,8 +74,6 @@ Good for: comparing model replies, reviewing prompt iterations, and studying age
 ## Example 5: Export a training-data draft
 
 Goal: turn a conversation into a JSONL draft for later labeling or evaluation.
-
-![Obsidian export case](cases/obsidian-export.svg)
 
 Steps:
 
