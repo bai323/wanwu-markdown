@@ -4,7 +4,7 @@
 
 公开仓库里的案例图使用脱敏或模拟内容。你之前采集过的 Sider 对话很适合作为产品验证材料，但不适合直接公开上传原文。
 
-![Sider 插件恢复案例](cases/sider-recovery.svg)
+![真实 Sider 分支恢复案例](cases/real-sider-branches.zh-CN.svg)
 
 ## 示例 1：保存一篇网页文章
 
@@ -59,7 +59,7 @@
 
 目标：看清楚长对话里不同回复路径、分叉点和模型来源。
 
-![分支报告案例](cases/branch-report.svg)
+![视觉分支报告案例](cases/real-branch-report.zh-CN.svg)
 
 步骤：
 
@@ -74,8 +74,6 @@
 ## 示例 5：导出训练数据草稿
 
 目标：把对话整理成 JSONL 草稿，供后续标注或评测。
-
-![Obsidian 输出案例](cases/obsidian-export.svg)
 
 步骤：
 

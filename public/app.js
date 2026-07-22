@@ -55,6 +55,14 @@ const I18N = {
   zh: {
     'brand.title': '万物 Markdown',
     'brand.tagline': '一键整理你有权保存的网页、对话和资料',
+    'download.app': '下载 App',
+    'download.note': '免费开源，本地优先',
+    'feature.assets': '沉淀数字资产',
+    'feature.assetsText': '把网页和对话保存成自己的资料库。',
+    'feature.agent': 'Agent 优先格式',
+    'feature.agentText': 'Markdown、JSON、JSONL 都方便继续读取。',
+    'feature.report': '视觉采集报告',
+    'feature.reportText': '长对话分支可以被看见、比较和复盘。',
     'source.web': '网页文章',
     'source.ai': 'AI 对话',
     'source.plugin': '浏览器插件',
@@ -113,6 +121,8 @@ const I18N = {
     'obsidian.path': '仓库路径',
     'obsidian.pathPlaceholder': '/Users/你/Documents/Obsidian',
     'obsidian.folder': '保存目录',
+    'obsidian.folderDefault': '万物Markdown/采集资产',
+    'obsidian.reportFile': '分支报告',
     'obsidian.submit': '存入 Obsidian',
     'tabs.graph': '分支',
     'tabs.report': '报告',
@@ -121,6 +131,8 @@ const I18N = {
     'tabs.dataset': '训练数据',
     'toolbar.noFile': '暂无输出文件',
     'toolbar.report': '生成分支报告',
+    'toolbar.copy': '复制',
+    'toolbar.download': '下载',
     'empty.title': '尚未载入对话图',
     'empty.body': '读取浏览器插件会话、网页链接或导入文件',
     'graph.branches': '分支对比',
@@ -130,6 +142,14 @@ const I18N = {
   en: {
     'brand.title': 'Everything Markdown',
     'brand.tagline': 'Everything to Markdown, locally.',
+    'download.app': 'Download app',
+    'download.note': 'Free, open source, local-first',
+    'feature.assets': 'Personal digital assets',
+    'feature.assetsText': 'Turn web pages and chats into your own archive.',
+    'feature.agent': 'Agent-ready Markdown',
+    'feature.agentText': 'Markdown, JSON, and JSONL stay easy to read later.',
+    'feature.report': 'Visual branch reports',
+    'feature.reportText': 'See, compare, and review long conversation branches.',
     'source.web': 'Web pages',
     'source.ai': 'AI chats',
     'source.plugin': 'Browser plugin',
@@ -188,14 +208,18 @@ const I18N = {
     'obsidian.path': 'Vault path',
     'obsidian.pathPlaceholder': '/Users/you/Documents/Obsidian',
     'obsidian.folder': 'Folder',
+    'obsidian.folderDefault': 'EverythingMarkdown/captures',
+    'obsidian.reportFile': 'Branch report',
     'obsidian.submit': 'Save to Obsidian',
     'tabs.graph': 'Branches',
     'tabs.report': 'Report',
-    'tabs.json': 'Structured data',
+    'tabs.json': 'Data',
     'tabs.annotate': 'Labels',
-    'tabs.dataset': 'Training data',
+    'tabs.dataset': 'Dataset',
     'toolbar.noFile': 'No output yet',
     'toolbar.report': 'Build branch report',
+    'toolbar.copy': 'Copy',
+    'toolbar.download': 'Download',
     'empty.title': 'No conversation graph loaded',
     'empty.body': 'Read a browser plugin chat, capture a URL, or import a file',
     'graph.branches': 'Branch comparison',
@@ -210,6 +234,18 @@ const STATUS_TRANSLATIONS = {
   正在采集: 'Capturing',
   '正在采集 AI 对话': 'Capturing AI chat',
   正在恢复: 'Recovering',
+  正在检测: 'Detecting',
+  检测完成: 'Detection complete',
+  检测失败: 'Detection failed',
+  '正在扫描 Obsidian Vault': 'Scanning Obsidian vaults',
+  '已扫描 Obsidian Vault': 'Obsidian vaults scanned',
+  '未检测到 Vault': 'No vault detected',
+  'Obsidian 扫描失败': 'Obsidian scan failed',
+  '请先完成一次采集': 'Capture something first',
+  '请选择或填写 Obsidian 仓库路径': 'Choose or enter an Obsidian vault path',
+  '正在写入 Obsidian': 'Writing to Obsidian',
+  '已存入 Obsidian': 'Saved to Obsidian',
+  'Obsidian 写入失败': 'Obsidian write failed',
   请选择文件: 'Choose a file',
   '请选择 JSON': 'Choose a JSON file',
   正在导入: 'Importing',
@@ -545,10 +581,10 @@ async function loadSiderProfiles() {
     if (!response.ok) throw new Error(data.error || '扫描失败');
     elements.profileSelect.innerHTML = data.profiles.length
       ? data.profiles.map((profile) => `<option value="${escapeAttr(profile.id)}">${escapeHtml(profile.label)}</option>`).join('')
-      : '<option value="">未发现 Sider</option>';
+      : `<option value="">${escapeHtml(state.language === 'en' ? 'Sider not found' : '未发现 Sider')}</option>`;
     if (data.profiles.length) await loadSiderConversations();
   } catch {
-    elements.profileSelect.innerHTML = '<option value="">扫描失败</option>';
+    elements.profileSelect.innerHTML = `<option value="">${escapeHtml(state.language === 'en' ? 'Scan failed' : '扫描失败')}</option>`;
   }
 }
 
@@ -556,7 +592,10 @@ async function loadSiderConversations(showStatus = false) {
   const profile = elements.profileSelect.value;
   if (!profile) return;
   elements.detectSiderButton.disabled = true;
-  elements.detectedChat.innerHTML = '<span>正在检测</span><strong>读取 Chrome 中的 Sider 会话</strong>';
+  elements.detectedChat.innerHTML =
+    state.language === 'en'
+      ? '<span>Detecting</span><strong>Reading Sider conversations from Chrome</strong>'
+      : '<span>正在检测</span><strong>读取 Chrome 中的 Sider 会话</strong>';
   if (showStatus) setStatus('正在检测');
 
   try {
@@ -565,14 +604,20 @@ async function loadSiderConversations(showStatus = false) {
     if (!response.ok) throw new Error(data.error || '检测失败');
     state.siderChats = data.chats || [];
     elements.siderChatSelect.innerHTML = state.siderChats.length
-      ? state.siderChats.map((chat) => `<option value="${escapeAttr(chat.id)}" ${chat.isCurrent ? 'selected' : ''}>${chat.isCurrent ? '【当前选中】' : ''}${escapeHtml(shortText(chat.title, 42))} · ${chat.messageCount} 条</option>`).join('')
-      : '<option value="">没有找到本地会话</option>';
+      ? state.siderChats
+          .map((chat) => {
+            const current = chat.isCurrent ? (state.language === 'en' ? '[Current] ' : '【当前选中】') : '';
+            const unit = state.language === 'en' ? 'messages' : '条';
+            return `<option value="${escapeAttr(chat.id)}" ${chat.isCurrent ? 'selected' : ''}>${current}${escapeHtml(shortText(chat.title, 42))} · ${chat.messageCount} ${unit}</option>`;
+          })
+          .join('')
+      : `<option value="">${escapeHtml(state.language === 'en' ? 'No local chats found' : '没有找到本地会话')}</option>`;
     renderSelectedSiderChat();
     if (showStatus) setStatus('检测完成');
   } catch (error) {
     state.siderChats = [];
-    elements.siderChatSelect.innerHTML = '<option value="">检测失败</option>';
-    elements.detectedChat.innerHTML = `<span>检测失败</span><strong>${escapeHtml(error.message || '无法读取 Sider')}</strong>`;
+    elements.siderChatSelect.innerHTML = `<option value="">${escapeHtml(state.language === 'en' ? 'Detection failed' : '检测失败')}</option>`;
+    elements.detectedChat.innerHTML = `<span>${escapeHtml(state.language === 'en' ? 'Detection failed' : '检测失败')}</span><strong>${escapeHtml(error.message || (state.language === 'en' ? 'Unable to read Sider' : '无法读取 Sider'))}</strong>`;
     setStatus(error.message || '检测失败');
   } finally {
     elements.detectSiderButton.disabled = false;
@@ -589,8 +634,8 @@ async function loadObsidianVaults(showStatus = false) {
     state.obsidianVaults = data.vaults || [];
     const savedPath = localStorage.getItem('wanwu.obsidian.vaultPath') || '';
     elements.obsidianVaultSelect.innerHTML = state.obsidianVaults.length
-      ? ['<option value="">手工路径</option>', ...state.obsidianVaults.map((vault) => `<option value="${escapeAttr(vault.path)}">${escapeHtml(vault.name)}</option>`)].join('')
-      : '<option value="">未检测到 Vault</option>';
+      ? [`<option value="">${escapeHtml(state.language === 'en' ? 'Manual path' : '手工路径')}</option>`, ...state.obsidianVaults.map((vault) => `<option value="${escapeAttr(vault.path)}">${escapeHtml(vault.name)}</option>`)].join('')
+      : `<option value="">${escapeHtml(state.language === 'en' ? 'No vault detected' : '未检测到 Vault')}</option>`;
     const matchedVault = state.obsidianVaults.find((vault) => vault.path === savedPath) || state.obsidianVaults[0];
     if (!elements.obsidianVaultPath.value && matchedVault) {
       elements.obsidianVaultSelect.value = matchedVault.path;
@@ -600,7 +645,7 @@ async function loadObsidianVaults(showStatus = false) {
     }
     if (showStatus) setStatus(state.obsidianVaults.length ? '已扫描 Obsidian Vault' : '未检测到 Vault');
   } catch (error) {
-    elements.obsidianVaultSelect.innerHTML = '<option value="">扫描失败</option>';
+    elements.obsidianVaultSelect.innerHTML = `<option value="">${escapeHtml(state.language === 'en' ? 'Scan failed' : '扫描失败')}</option>`;
     if (showStatus) setStatus(error.message || 'Obsidian 扫描失败');
   } finally {
     elements.refreshVaultsButton.disabled = false;
@@ -664,14 +709,17 @@ async function exportToObsidian(button) {
 function renderSelectedSiderChat() {
   const chat = state.siderChats.find((item) => item.id === elements.siderChatSelect.value);
   if (!chat) {
-    elements.detectedChat.innerHTML = '<span>未检测到</span><strong>请先在 Chrome 的 Sider 中打开一段对话</strong>';
+    elements.detectedChat.innerHTML =
+      state.language === 'en'
+        ? '<span>Not detected</span><strong>Open a Sider chat in Chrome first</strong>'
+        : '<span>未检测到</span><strong>请先在 Chrome 的 Sider 中打开一段对话</strong>';
     return;
   }
 
   elements.detectedChat.innerHTML = `
-    <span>${chat.isCurrent ? 'Chrome 当前选中' : '已选择历史对话'}</span>
+    <span>${escapeHtml(chat.isCurrent ? (state.language === 'en' ? 'Chrome current chat' : 'Chrome 当前选中') : state.language === 'en' ? 'Selected history chat' : '已选择历史对话')}</span>
     <strong>${escapeHtml(chat.title)}</strong>
-    <small>${chat.messageCount} 条消息${chat.updatedAt ? ` · 更新于 ${escapeHtml(formatDate(chat.updatedAt))}` : ''}</small>`;
+    <small>${chat.messageCount} ${escapeHtml(state.language === 'en' ? 'messages' : '条消息')}${chat.updatedAt ? ` · ${escapeHtml(state.language === 'en' ? 'updated ' : '更新于 ')}${escapeHtml(formatDate(chat.updatedAt))}` : ''}</small>`;
 }
 
 function setSource(source) {
@@ -790,6 +838,12 @@ function applyLanguage() {
   });
   document.querySelectorAll('[data-i18n-placeholder]').forEach((node) => {
     node.setAttribute('placeholder', t(node.dataset.i18nPlaceholder));
+  });
+  document.querySelectorAll('[data-i18n-value]').forEach((node) => {
+    const key = node.dataset.i18nValue;
+    const current = node.value.trim();
+    const knownValues = Object.values(I18N).map((messages) => messages[key]).filter(Boolean);
+    if (!current || knownValues.includes(current)) node.value = t(key);
   });
   if (!state.selectedJsonFile) elements.jsonFileName.textContent = t('import.choose');
   if (!state.result) {
