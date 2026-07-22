@@ -42,11 +42,13 @@ Full-model branch alignment is the core report view: model legend, fork point, c
 - AI chats from Claude, ChatGPT, Gemini, Codex, and similar web tools.
 - Browser-plugin conversations, currently focused on Sider.
 - Existing JSON or conversation graph files.
+- Open-window capture for pages that need login, scrolling, or extra loading time.
 
 ## Outputs
 
 - Markdown for reading, notes, and Obsidian.
 - HTML branch reports for visual review.
+- Conversation asset bundles with `manifest.json` for Markdown, reports, JSON, JSONL, and attachments.
 - Structured JSON for source-preserving automation.
 - JSONL drafts for labeling, evals, and dataset preparation.
 - Optional Obsidian vault export.
@@ -77,6 +79,8 @@ AI chats: open the target conversation and copy the current page URL. Some AI pr
 Browser plugin: Sider does not need a URL. Open the target Sider chat in Chrome, then click `Detect current chat`.
 
 Import file: treat JSON as a recoverable archive file. It is useful for past captures, structured conversations, and developer exports.
+
+Open-window capture: paste a URL, click `Open capture window`, sign in or scroll until the conversation is ready, then click `Capture open window`. This is the safer first version of real-time capture because the user controls what is visible before saving.
 
 ## Release boundary
 

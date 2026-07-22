@@ -5,10 +5,11 @@ import { tmpdir } from 'node:os';
 import { basename, extname, join, resolve } from 'node:path';
 
 import { browserExtractPage } from './browser-extractor.js';
-import { createCaptureDocument, documentToJsonl, documentToMarkdown, validateCaptureRequest } from '../core/schema.js';
+import { buildAssetManifest, createCaptureDocument, documentToJsonl, documentToMarkdown, validateCaptureRequest } from '../core/schema.js';
 import { sanitizeFilename } from '../core/extractors.js';
 
 const DEFAULT_WAIT_MS = 4500;
+const liveSessions = new Map();
 
 export async function captureUrl(payload, options = {}) {
   const validation = validateCaptureRequest(payload);
@@ -19,11 +20,6 @@ export async function captureUrl(payload, options = {}) {
   }
 
   const request = validation.value;
-  const outRoot = options.outRoot || resolve('captures');
-  const runId = new Date().toISOString().replace(/[:.]/g, '-');
-  const runDir = join(outRoot, `${sanitizeFilename(new URL(request.url).hostname)}-${runId}`);
-  await mkdir(runDir, { recursive: true });
-
   const browser = await launchChrome({
     url: request.url,
     visible: Boolean(payload.visibleBrowser),
@@ -32,38 +28,9 @@ export async function captureUrl(payload, options = {}) {
 
   try {
     const page = await waitForPage(browser.port, request.url);
-    const client = await connectPage(page.webSocketDebuggerUrl);
-    const raw = await evaluateExtractor(client, request);
-    const doc = createCaptureDocument(raw);
-
-    if (request.saveAssets) {
-      await saveLoadedAssets({ client, doc, runDir });
-    }
-
-    const markdown = documentToMarkdown(doc);
-    const jsonl = documentToJsonl(doc);
-    const json = JSON.stringify(doc, null, 2);
-
-    const markdownPath = join(runDir, 'document.md');
-    const jsonPath = join(runDir, 'document.json');
-    const jsonlPath = join(runDir, 'dataset.jsonl');
-
-    await writeFile(markdownPath, markdown, 'utf8');
-    await writeFile(jsonPath, json, 'utf8');
-    await writeFile(jsonlPath, jsonl, 'utf8');
-    await client.close();
-
+    const result = await capturePageToBundle(page, request, options);
     return {
-      document: doc,
-      markdown,
-      json,
-      jsonl,
-      files: {
-        directory: runDir,
-        markdown: markdownPath,
-        json: jsonPath,
-        jsonl: jsonlPath
-      },
+      ...result,
       browser: {
         visible: Boolean(payload.visibleBrowser)
       }
@@ -77,6 +44,70 @@ export async function captureUrl(payload, options = {}) {
       await rm(browser.profileDir, { recursive: true, force: true });
     }
   }
+}
+
+export async function openLiveCaptureSession(payload, options = {}) {
+  const validation = validateCaptureRequest(payload);
+  if (!validation.ok) {
+    const error = new Error(validation.error);
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const request = validation.value;
+  const browser = await launchChrome({
+    url: request.url,
+    visible: true,
+    waitMs: payload.waitMs || 1000
+  });
+  const sessionId = `live-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+  liveSessions.set(sessionId, {
+    ...browser,
+    request,
+    outRoot: options.outRoot || resolve('captures'),
+    openedAt: new Date().toISOString()
+  });
+
+  return {
+    sessionId,
+    url: request.url,
+    openedAt: liveSessions.get(sessionId).openedAt,
+    mode: 'open-window-capture'
+  };
+}
+
+export async function captureLiveSession(sessionId, options = {}) {
+  const session = liveSessions.get(sessionId);
+  if (!session) {
+    const error = new Error('实时采集窗口不存在或已关闭');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  const page = await activePage(session.port);
+  const result = await capturePageToBundle(page, session.request, {
+    ...options,
+    outRoot: session.outRoot
+  });
+
+  return {
+    ...result,
+    live: {
+      sessionId,
+      openedAt: session.openedAt,
+      capturedUrl: page.url
+    }
+  };
+}
+
+export async function closeLiveCaptureSession(sessionId) {
+  const session = liveSessions.get(sessionId);
+  if (!session) return { closed: false };
+  liveSessions.delete(sessionId);
+  session.child.kill('SIGTERM');
+  setTimeout(() => session.child.kill('SIGKILL'), 1500).unref();
+  await rm(session.profileDir, { recursive: true, force: true });
+  return { closed: true };
 }
 
 async function launchChrome({ url, visible, waitMs }) {
@@ -157,6 +188,17 @@ async function waitForPage(port, expectedUrl) {
   throw new Error('没有找到 Chrome 页面目标');
 }
 
+async function activePage(port) {
+  const pages = await fetchJson(`http://127.0.0.1:${port}/json`);
+  const page = pages.find((item) => item.type === 'page' && item.url && !item.url.startsWith('devtools://'));
+  if (!page) {
+    const error = new Error('没有找到可采集的打开页面');
+    error.statusCode = 404;
+    throw error;
+  }
+  return page;
+}
+
 async function connectPage(wsUrl) {
   const ws = new WebSocket(wsUrl);
   await new Promise((resolveOpen, reject) => {
@@ -205,6 +247,47 @@ async function evaluateExtractor(client, request) {
   }
 
   return result.result.result.value;
+}
+
+async function capturePageToBundle(page, request, options = {}) {
+  const outRoot = options.outRoot || resolve('captures');
+  const runId = new Date().toISOString().replace(/[:.]/g, '-');
+  const urlForName = page.url || request.url;
+  const runDir = join(outRoot, `${sanitizeFilename(new URL(urlForName).hostname)}-${runId}`);
+  await mkdir(runDir, { recursive: true });
+
+  const client = await connectPage(page.webSocketDebuggerUrl);
+  try {
+    const raw = await evaluateExtractor(client, { ...request, url: page.url || request.url });
+    const doc = createCaptureDocument(raw);
+
+    if (request.saveAssets) {
+      await saveLoadedAssets({ client, doc, runDir });
+    }
+
+    const markdown = documentToMarkdown(doc);
+    const jsonl = documentToJsonl(doc);
+    const json = JSON.stringify(doc, null, 2);
+    const files = {
+      directory: runDir,
+      markdown: join(runDir, 'document.md'),
+      json: join(runDir, 'document.json'),
+      jsonl: join(runDir, 'dataset.jsonl'),
+      manifest: join(runDir, 'manifest.json')
+    };
+    const manifest = buildAssetManifest(doc, files);
+
+    await Promise.all([
+      writeFile(files.markdown, markdown, 'utf8'),
+      writeFile(files.json, json, 'utf8'),
+      writeFile(files.jsonl, jsonl, 'utf8'),
+      writeFile(files.manifest, JSON.stringify(manifest, null, 2), 'utf8')
+    ]);
+
+    return { document: doc, markdown, json, jsonl, manifest, files };
+  } finally {
+    await client.close();
+  }
 }
 
 async function saveLoadedAssets({ client, doc, runDir }) {

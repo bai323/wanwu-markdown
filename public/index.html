@@ -22,7 +22,7 @@
                 </select>
               </label>
             </div>
-            <p data-i18n="brand.tagline">一键整理你有权保存的网页、对话和资料</p>
+            <p data-i18n="brand.tagline">一键生成 Markdown、美观报告和结构化资产</p>
           </div>
         </div>
 
@@ -44,6 +44,16 @@
           <button type="button" data-source="sider" data-i18n="source.plugin">浏览器插件</button>
           <button type="button" data-source="json" data-i18n="source.import">导入文件</button>
         </div>
+
+        <section class="live-capture-panel" aria-label="实时采集">
+          <button id="live-open-button" class="secondary-button" type="button">
+            <span aria-hidden="true">↗</span><span data-i18n="live.open">打开采集窗口</span>
+          </button>
+          <button id="live-capture-button" class="secondary-button" type="button" disabled>
+            <span aria-hidden="true">●</span><span data-i18n="live.capture">采集当前窗口</span>
+          </button>
+          <small data-i18n="live.note">适合需要登录、滚动或等待加载的大模型对话。</small>
+        </section>
 
         <form id="capture-form" class="control-panel source-panel active" data-source-panel="web">
           <div class="source-note">
@@ -195,6 +205,7 @@
             <button class="tab" type="button" data-tab="report" data-i18n="tabs.report">报告</button>
             <button class="tab" type="button" data-tab="markdown">Markdown</button>
             <button class="tab" type="button" data-tab="json" data-i18n="tabs.json">结构数据</button>
+            <button class="tab" type="button" data-tab="bundle" data-i18n="tabs.bundle">资产包</button>
             <button class="tab" type="button" data-tab="annotate" data-i18n="tabs.annotate">标注</button>
             <button class="tab" type="button" data-tab="dataset" data-i18n="tabs.dataset">训练数据</button>
           </nav>
@@ -247,6 +258,10 @@
 
         <section id="json-panel" class="panel">
           <textarea id="json-output" spellcheck="false"></textarea>
+        </section>
+
+        <section id="bundle-panel" class="panel">
+          <textarea id="bundle-output" spellcheck="false"></textarea>
         </section>
 
         <section id="annotate-panel" class="panel">

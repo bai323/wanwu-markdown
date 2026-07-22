@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
 import {
+  buildAssetManifest,
   createCaptureDocument,
   documentToJsonl,
   documentToMarkdown,
@@ -74,6 +75,50 @@ describe('采集文档 schema', () => {
     assert.equal(rows[0].block.role, 'user');
     assert.equal(rows[0].labels.intent, '用户召回');
     assert.equal(rows[0].labels.reusable, true);
+  });
+
+  it('生成对话资产包清单，记录文档、报告、数据和附件来源', () => {
+    const doc = createCaptureDocument({
+      sourceUrl: 'https://example.com/chat',
+      title: '资产包测试',
+      adapter: 'chatgpt-chat',
+      kind: 'conversation',
+      blocks: [
+        {
+          id: 'm1',
+          type: 'message',
+          role: 'assistant',
+          model: 'GPT-5.5',
+          contentMarkdown: '生成了文件。',
+          attachments: [
+            {
+              type: 'file',
+              name: 'analysis.csv',
+              url: 'https://example.com/files/analysis.csv',
+              mimeType: 'text/csv'
+            }
+          ]
+        }
+      ],
+      assets: [{ type: 'image', name: 'chart.png', localPath: '/tmp/chart.png', mimeType: 'image/png' }]
+    });
+
+    const manifest = buildAssetManifest(doc, {
+      markdown: '/tmp/conversation.md',
+      report: '/tmp/branch-report.html',
+      json: '/tmp/conversation.graph.json',
+      jsonl: '/tmp/dataset.jsonl'
+    });
+
+    assert.equal(manifest.kind, 'conversation-asset-bundle');
+    assert.equal(manifest.files.markdown, '/tmp/conversation.md');
+    assert.equal(manifest.files.report, '/tmp/branch-report.html');
+    assert.equal(manifest.assets.length, 2);
+    assert.equal(manifest.assets[0].messageId, 'm1');
+    assert.equal(manifest.assets[0].model, 'GPT-5.5');
+    assert.equal(manifest.assets[0].name, 'analysis.csv');
+    assert.equal(manifest.assets[0].downloaded, false);
+    assert.equal(manifest.assets[1].downloaded, true);
   });
 
   it('校验采集请求，阻止空 URL、非 http 协议和未知适配器', () => {
