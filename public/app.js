@@ -7,6 +7,7 @@ const state = {
   selectedJsonFile: null,
   obsidianVaults: [],
   siderChats: [],
+  liveSessionId: '',
   result: null
 };
 
@@ -28,6 +29,7 @@ const elements = {
   fileOutput: document.querySelector('#file-output'),
   markdownOutput: document.querySelector('#markdown-output'),
   jsonOutput: document.querySelector('#json-output'),
+  bundleOutput: document.querySelector('#bundle-output'),
   jsonlOutput: document.querySelector('#jsonl-output'),
   annotationList: document.querySelector('#annotation-list'),
   graphEmpty: document.querySelector('#graph-empty'),
@@ -50,6 +52,8 @@ const elements = {
 };
 
 elements.languageSelect = document.querySelector('#language-select');
+elements.liveOpenButton = document.querySelector('#live-open-button');
+elements.liveCaptureButton = document.querySelector('#live-capture-button');
 
 const I18N = {
   zh: {
@@ -99,6 +103,9 @@ const I18N = {
     'common.saveAssets': '保存图片',
     'common.includeProcess': '过程 / 工具',
     'common.visibleBrowser': '显示浏览器',
+    'live.open': '打开采集窗口',
+    'live.capture': '采集当前窗口',
+    'live.note': '适合需要登录、滚动或等待加载的大模型对话。',
     'adapter.auto': '自动',
     'adapter.wechat': '微信公众号文章',
     'adapter.x': 'X 文章 / 帖文',
@@ -127,6 +134,7 @@ const I18N = {
     'tabs.graph': '分支',
     'tabs.report': '报告',
     'tabs.json': '结构数据',
+    'tabs.bundle': '资产包',
     'tabs.annotate': '标注',
     'tabs.dataset': '训练数据',
     'toolbar.noFile': '暂无输出文件',
@@ -186,6 +194,9 @@ const I18N = {
     'common.saveAssets': 'Save images',
     'common.includeProcess': 'Process / tools',
     'common.visibleBrowser': 'Show browser',
+    'live.open': 'Open capture window',
+    'live.capture': 'Capture open window',
+    'live.note': 'Best for chats that need login, scrolling, or time to load.',
     'adapter.auto': 'Auto',
     'adapter.wechat': 'WeChat article',
     'adapter.x': 'X article / post',
@@ -214,6 +225,7 @@ const I18N = {
     'tabs.graph': 'Branches',
     'tabs.report': 'Report',
     'tabs.json': 'Data',
+    'tabs.bundle': 'Bundle',
     'tabs.annotate': 'Labels',
     'tabs.dataset': 'Dataset',
     'toolbar.noFile': 'No output yet',
@@ -252,6 +264,9 @@ const STATUS_TRANSLATIONS = {
   导入失败: 'Import failed',
   处理失败: 'Processing failed',
   已完成: 'Done',
+  '已打开采集窗口': 'Capture window opened',
+  '请先打开采集窗口': 'Open a capture window first',
+  '正在采集当前窗口': 'Capturing open window',
   报告已生成: 'Report built',
   待处理: 'Idle'
 };
@@ -273,6 +288,8 @@ elements.aiForm.addEventListener('submit', handleAiCapture);
 elements.siderForm.addEventListener('submit', handleSiderRecover);
 elements.jsonForm.addEventListener('submit', handleJsonImport);
 elements.detectSiderButton.addEventListener('click', () => loadSiderConversations(true));
+elements.liveOpenButton.addEventListener('click', () => openLiveCapture(elements.liveOpenButton));
+elements.liveCaptureButton.addEventListener('click', () => captureLiveWindow(elements.liveCaptureButton));
 elements.profileSelect.addEventListener('change', () => loadSiderConversations());
 elements.siderChatSelect.addEventListener('change', renderSelectedSiderChat);
 elements.refreshVaultsButton.addEventListener('click', () => loadObsidianVaults(true));
@@ -304,9 +321,10 @@ document.querySelector('#copy-button').addEventListener('click', async () => {
 document.querySelector('#download-button').addEventListener('click', () => {
   const text = currentText();
   if (!text) return;
-  const extension = state.activeTab === 'json' ? 'json' : state.activeTab === 'dataset' ? 'jsonl' : state.activeTab === 'report' ? 'html' : 'md';
+  const extension = state.activeTab === 'json' || state.activeTab === 'bundle' ? 'json' : state.activeTab === 'dataset' ? 'jsonl' : state.activeTab === 'report' ? 'html' : 'md';
   const mimeType = state.activeTab === 'report' ? 'text/html;charset=utf-8' : 'text/plain;charset=utf-8';
-  downloadText(text, `${safeFilename(state.result?.document?.title || '万物-Markdown')}.${extension}`, mimeType);
+  const baseName = state.activeTab === 'bundle' ? 'manifest' : safeFilename(state.result?.document?.title || '万物-Markdown');
+  downloadText(text, `${baseName}.${extension}`, mimeType);
 });
 
 elements.reportButton.addEventListener('click', () => {
@@ -343,6 +361,42 @@ async function handleAiCapture(event) {
     visibleBrowser: document.querySelector('#ai-visible-browser').checked
   };
   await runRequest('/api/capture', payload, event.submitter, '正在采集 AI 对话');
+}
+
+async function openLiveCapture(button) {
+  const payload = livePayload();
+  if (!payload.url) {
+    setStatus(state.source === 'ai' ? '请输入对话页面 URL' : '请输入 URL');
+    return;
+  }
+
+  setStatus('正在检测');
+  button.disabled = true;
+  try {
+    const response = await fetch('/api/live/open', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || '打开失败');
+    state.liveSessionId = data.sessionId;
+    elements.liveCaptureButton.disabled = false;
+    setStatus('已打开采集窗口');
+  } catch (error) {
+    setStatus(error.message || '打开失败');
+  } finally {
+    button.disabled = false;
+  }
+}
+
+async function captureLiveWindow(button) {
+  if (!state.liveSessionId) {
+    setStatus('请先打开采集窗口');
+    return;
+  }
+
+  await runRequest('/api/live/capture', { sessionId: state.liveSessionId }, button, '正在采集当前窗口');
 }
 
 async function handleSiderRecover(event) {
@@ -410,9 +464,10 @@ function acceptResult(data) {
 }
 
 function renderResult() {
-  const { document: doc, markdown, json, jsonl, files, graph, reportHtml } = state.result;
+  const { document: doc, markdown, json, jsonl, manifest, files, graph, reportHtml } = state.result;
   elements.markdownOutput.value = markdown || '';
   elements.jsonOutput.value = json || JSON.stringify(doc, null, 2);
+  elements.bundleOutput.value = JSON.stringify(manifest || buildClientManifest(doc, files), null, 2);
   elements.jsonlOutput.value = jsonl || buildJsonl(doc);
   elements.kindText.textContent = graph ? '对话图' : doc.kind || '-';
   elements.blockCount.textContent = String(graph?.stats?.messageCount || doc.blocks?.length || 0);
@@ -745,8 +800,47 @@ function currentText() {
   if (!state.result) return '';
   if (state.activeTab === 'report') return state.result.reportHtml || '';
   if (state.activeTab === 'json') return elements.jsonOutput.value;
+  if (state.activeTab === 'bundle') return elements.bundleOutput.value;
   if (state.activeTab === 'dataset') return elements.jsonlOutput.value;
   return elements.markdownOutput.value;
+}
+
+function livePayload() {
+  const isAi = state.source === 'ai';
+  return {
+    url: (isAi ? document.querySelector('#ai-url-input').value : document.querySelector('#url-input').value).trim(),
+    adapter: isAi ? document.querySelector('#ai-adapter-select').value : document.querySelector('#adapter-select').value,
+    saveAssets: isAi ? document.querySelector('#ai-save-assets').checked : document.querySelector('#save-assets').checked,
+    includeProcess: isAi ? document.querySelector('#ai-include-process').checked : document.querySelector('#include-process').checked
+  };
+}
+
+function buildClientManifest(doc = {}, files = {}) {
+  // conversation asset bundle fallback for imported data that predates manifest.json.
+  return {
+    version: '0.1',
+    kind: 'conversation-asset-bundle',
+    title: doc.title || '',
+    source: doc.source || {},
+    files: {
+      markdown: files?.markdown || '',
+      report: files?.report || '',
+      json: files?.json || '',
+      jsonl: files?.jsonl || '',
+      manifest: files?.manifest || 'manifest.json'
+    },
+    assets: [
+      ...(doc.blocks || []).flatMap((block) => (block.attachments || []).map((attachment) => ({
+        scope: 'block',
+        messageId: block.id || '',
+        role: block.role || '',
+        model: block.model || '',
+        ...attachment,
+        downloaded: Boolean(attachment.localPath)
+      }))),
+      ...(doc.assets || []).map((asset) => ({ scope: 'document', ...asset, downloaded: Boolean(asset.localPath) }))
+    ]
+  };
 }
 
 function buildJsonl(doc) {

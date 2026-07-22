@@ -66,7 +66,7 @@ describe('万物 Markdown 对话工作台', () => {
   it('默认界面精简，把专业设置收进高级选项', async () => {
     const html = await readFile('public/index.html', 'utf8');
 
-    assert.match(html, /一键整理你有权保存的网页、对话和资料/);
+    assert.match(html, /一键生成 Markdown、美观报告和结构化资产/);
     assert.match(html, /高级设置/);
     assert.match(html, /data-source-panel="web"[\s\S]*<details class="advanced-options">[\s\S]*适配器/);
     assert.match(html, /data-source-panel="ai"[\s\S]*<details class="advanced-options">[\s\S]*大模型来源/);
@@ -112,5 +112,20 @@ describe('万物 Markdown 对话工作台', () => {
     assert.match(script, /branchColumn/);
     assert.match(script, /报告已生成/);
     assert.match(script, /reportPreview\.srcdoc/);
+  });
+
+  it('提供对话资产包和打开窗口实时采集入口', async () => {
+    const html = await readFile('public/index.html', 'utf8');
+    const script = await readFile('public/app.js', 'utf8');
+
+    assert.match(html, /id="live-open-button"/);
+    assert.match(html, /id="live-capture-button"/);
+    assert.match(html, /data-i18n="live\.open"/);
+    assert.match(html, /data-i18n="live\.capture"/);
+    assert.match(html, /data-i18n="tabs\.bundle"/);
+    assert.match(script, /conversation asset bundle/i);
+    assert.match(script, /\/api\/live\/open/);
+    assert.match(script, /\/api\/live\/capture/);
+    assert.match(script, /manifest\.json/);
   });
 });

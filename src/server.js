@@ -2,7 +2,7 @@ import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { extname, join, resolve } from 'node:path';
 
-import { captureUrl } from './capture/chrome.js';
+import { captureLiveSession, captureUrl, closeLiveCaptureSession, openLiveCaptureSession } from './capture/chrome.js';
 import { exportConversationPayload } from './core/conversation-export.js';
 import { exportToObsidian, findObsidianVaults } from './core/obsidian-export.js';
 import { inspectSiderConversations, listSiderProfiles, recoverSiderConversation } from './importers/sider-local.js';
@@ -46,6 +46,24 @@ const server = createServer(async (req, res) => {
         service: '万物 Markdown',
         time: new Date().toISOString()
       });
+    }
+
+    if (req.method === 'POST' && req.url === '/api/live/open') {
+      const payload = await readJsonBody(req);
+      const result = await openLiveCaptureSession(payload);
+      return sendJson(res, 200, result);
+    }
+
+    if (req.method === 'POST' && req.url === '/api/live/capture') {
+      const payload = await readJsonBody(req);
+      const result = await captureLiveSession(payload.sessionId);
+      return sendJson(res, 200, result);
+    }
+
+    if (req.method === 'POST' && req.url === '/api/live/close') {
+      const payload = await readJsonBody(req);
+      const result = await closeLiveCaptureSession(payload.sessionId);
+      return sendJson(res, 200, result);
     }
 
     if (req.method === 'GET' && req.url === '/api/obsidian/vaults') {

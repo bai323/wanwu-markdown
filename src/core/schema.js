@@ -173,6 +173,43 @@ export function documentToJsonl(doc) {
     .join('\n') + '\n';
 }
 
+export function buildAssetManifest(doc, files = {}) {
+  const capturedAt = new Date().toISOString();
+  const assets = [];
+
+  for (const block of doc.blocks || []) {
+    for (const attachment of block.attachments || []) {
+      assets.push(assetEntry(attachment, {
+        scope: 'block',
+        messageId: block.id,
+        role: block.role,
+        model: block.model
+      }));
+    }
+  }
+
+  for (const asset of doc.assets || []) {
+    assets.push(assetEntry(asset, { scope: 'document' }));
+  }
+
+  return {
+    version: '0.1',
+    kind: 'conversation-asset-bundle',
+    title: doc.title || '',
+    source: doc.source || {},
+    capturedAt: doc.capturedAt || capturedAt,
+    generatedAt: capturedAt,
+    files: {
+      markdown: files.markdown || '',
+      report: files.report || '',
+      json: files.json || '',
+      jsonl: files.jsonl || '',
+      manifest: files.manifest || ''
+    },
+    assets
+  };
+}
+
 export function cleanMarkdown(value) {
   return String(value || '')
     .replace(/\u00a0/g, ' ')
@@ -227,6 +264,23 @@ function normalizeLinks(links = []) {
   }
 
   return result;
+}
+
+function assetEntry(attachment, context = {}) {
+  return {
+    scope: context.scope || 'document',
+    messageId: context.messageId || '',
+    role: context.role || '',
+    model: context.model || '',
+    type: attachment.type || 'file',
+    name: attachment.name || '',
+    url: attachment.url || '',
+    localPath: attachment.localPath || '',
+    mimeType: attachment.mimeType || '',
+    width: attachment.width || 0,
+    height: attachment.height || 0,
+    downloaded: Boolean(attachment.localPath)
+  };
 }
 
 function safeHostname(value) {

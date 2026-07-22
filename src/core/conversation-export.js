@@ -7,7 +7,7 @@ import {
   normalizeConversationGraph
 } from './conversation-graph.js';
 import { conversationGraphToHtml } from './conversation-report.js';
-import { documentToJsonl } from './schema.js';
+import { buildAssetManifest, documentToJsonl } from './schema.js';
 import { sanitizeFilename } from './extractors.js';
 
 export async function exportConversationPayload(payload, options = {}) {
@@ -33,15 +33,18 @@ export async function exportConversationPayload(payload, options = {}) {
     markdown: join(runDir, 'conversation.md'),
     json: join(runDir, 'conversation.graph.json'),
     jsonl: join(runDir, 'dataset.jsonl'),
-    report: join(runDir, 'branch-report.html')
+    report: join(runDir, 'branch-report.html'),
+    manifest: join(runDir, 'manifest.json')
   };
+  const manifest = buildAssetManifest(document, files);
 
   await Promise.all([
     writeFile(files.markdown, markdown, 'utf8'),
     writeFile(files.json, json, 'utf8'),
     writeFile(files.jsonl, jsonl, 'utf8'),
-    writeFile(files.report, reportHtml, 'utf8')
+    writeFile(files.report, reportHtml, 'utf8'),
+    writeFile(files.manifest, JSON.stringify(manifest, null, 2), 'utf8')
   ]);
 
-  return { graph, document, markdown, json, jsonl, reportHtml, files };
+  return { graph, document, markdown, json, jsonl, reportHtml, manifest, files };
 }
