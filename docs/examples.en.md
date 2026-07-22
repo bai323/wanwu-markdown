@@ -1,6 +1,10 @@
 # Real examples
 
-These are practical tasks Wanwu Markdown is currently suited for.
+These are practical tasks Everything Markdown is currently suited for.
+
+The public case images use sanitized or simulated content. A real Sider conversation is useful for product validation, but private chat text should not be uploaded to a public repository.
+
+![Sider recovery case](cases/sider-recovery.svg)
 
 ## Example 1: Save a web article
 
@@ -43,7 +47,7 @@ Steps:
 
 1. Open the Sider plugin in Chrome.
 2. Open the chat you want to save.
-3. Return to Wanwu Markdown and choose `Browser plugin`.
+3. Return to Everything Markdown and choose `Browser plugin`.
 4. Select the right Chrome profile.
 5. Click `Detect current chat`.
 6. Choose the target chat and click `Recover selected chat`.
@@ -54,6 +58,8 @@ Good for: long chats with branches where copy-paste loses structure.
 ## Example 4: Build a branch report
 
 Goal: inspect different reply paths, branch points, and model sources in a long conversation.
+
+![Branch report case](cases/branch-report.svg)
 
 Steps:
 
@@ -68,6 +74,8 @@ Good for: comparing model replies, reviewing prompt iterations, and studying age
 ## Example 5: Export a training-data draft
 
 Goal: turn a conversation into a JSONL draft for later labeling or evaluation.
+
+![Obsidian export case](cases/obsidian-export.svg)
 
 Steps:
 

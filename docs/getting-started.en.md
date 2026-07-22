@@ -15,7 +15,7 @@ If you do not use Git yet, open the GitHub page, click the green `Code` button, 
 
 ## 2. Install Node.js
 
-Wanwu Markdown needs Node.js 22 or newer. Check your version:
+Everything Markdown needs Node.js 22 or newer. Check your version:
 
 ```bash
 node -v

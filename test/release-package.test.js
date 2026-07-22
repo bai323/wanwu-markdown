@@ -11,9 +11,11 @@ describe('GitHub 发布包装', () => {
 
     assert.match(readme, /万物 Markdown/);
     assert.match(readme, /把网页、AI 对话和浏览器插件里的内容整理成 Markdown/);
-    assert.match(readme, /Wanwu Markdown/);
+    assert.doesNotMatch(readme, /Wanwu Markdown/);
+    assert.match(readme, /Everything Markdown/);
+    assert.match(readme, /Everything to Markdown, locally/);
     assert.match(readme, /Turn web pages, AI chats, and browser-plugin conversations into Markdown/);
-    assert.match(readme, /!\[Wanwu Markdown product screenshot\]\(docs\/product-screenshot\.png\)/);
+    assert.match(readme, /!\[Everything Markdown product screenshot\]\(docs\/product-screenshot\.png\)/);
     assert.match(readme, /\[新手教程\]\(docs\/getting-started\.zh-CN\.md\)/);
     assert.match(readme, /\[Beginner guide\]\(docs\/getting-started\.en\.md\)/);
     assert.match(readme, /\[真实使用示例\]\(docs\/examples\.zh-CN\.md\)/);
@@ -30,6 +32,9 @@ describe('GitHub 发布包装', () => {
     await access('docs/getting-started.en.md');
     await access('docs/examples.zh-CN.md');
     await access('docs/examples.en.md');
+    await access('docs/cases/sider-recovery.svg');
+    await access('docs/cases/branch-report.svg');
+    await access('docs/cases/obsidian-export.svg');
   });
 
   it('配置 CI 与忽略本地生成材料', async () => {
