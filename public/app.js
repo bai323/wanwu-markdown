@@ -1,6 +1,7 @@
 const state = {
   activeTab: 'graph',
   source: 'web',
+  language: localStorage.getItem('wanwu-language') || 'zh',
   graphMode: 'branches',
   selectedBranchIndex: 0,
   selectedJsonFile: null,
@@ -48,6 +49,177 @@ const elements = {
   refreshVaultsButton: document.querySelector('#refresh-vaults-button')
 };
 
+elements.languageSelect = document.querySelector('#language-select');
+
+const I18N = {
+  zh: {
+    'brand.title': '万物 Markdown',
+    'brand.tagline': '一键整理你有权保存的网页、对话和资料',
+    'source.web': '网页文章',
+    'source.ai': 'AI 对话',
+    'source.plugin': '浏览器插件',
+    'source.import': '导入文件',
+    'web.noteTitle': '文章 URL 从哪里来',
+    'web.note': '打开微信公众号文章、X 帖文或普通网页，复制浏览器地址栏里的链接，粘贴到下方。',
+    'web.url': '文章 URL',
+    'web.urlPlaceholder': 'https://mp.weixin.qq.com/s/... 或 https://x.com/.../status/...',
+    'web.adapter': '适配器',
+    'web.submit': '开始采集',
+    'ai.noteTitle': 'AI 对话 URL 怎么拿',
+    'ai.note': 'Claude、ChatGPT、Gemini、Codex 网页对话：打开目标对话后，复制浏览器地址栏里的链接。想免 URL：浏览器插件可以直接读取 Sider；Claude、ChatGPT、Codex 这类云端对话需要先打开网页、使用官方导出或授权 API。',
+    'ai.url': '对话页面 URL',
+    'ai.urlPlaceholder': 'https://claude.ai/chat/... 或 https://chatgpt.com/...',
+    'ai.adapter': '大模型来源',
+    'ai.submit': '采集 AI 对话',
+    'plugin.noteTitle': '浏览器插件',
+    'plugin.note': '当前支持：Sider 插件。Sider 插件不用 URL，先在 Chrome 的 Sider 中打开目标对话，再点击下方“重新检测”。',
+    'plugin.profile': 'Chrome 配置',
+    'plugin.detect': '重新检测当前对话',
+    'plugin.detecting': '正在检测',
+    'plugin.waiting': '等待读取 Sider 当前对话',
+    'plugin.target': '目标对话',
+    'plugin.manual': '高级：手工输入会话 ID',
+    'plugin.chatId': '会话 ID',
+    'plugin.chatIdPlaceholder': '通常无需填写',
+    'plugin.submit': '恢复所选对话',
+    'import.noteTitle': '导入文件是什么场景',
+    'import.note': '不用先理解 JSON，可以把它理解成“可恢复的存档文件”。适合导入历史采集结果、别人给你的结构化对话或开发者数据，例如 conversation.graph.json；训练标注数据通常看 dataset.jsonl。',
+    'import.choose': '选择导入文件',
+    'import.support': '支持 JSON、messages 与 conversation graph',
+    'import.submit': '导入文件',
+    'common.advanced': '高级设置',
+    'common.saveAssets': '保存图片',
+    'common.includeProcess': '过程 / 工具',
+    'common.visibleBrowser': '显示浏览器',
+    'adapter.auto': '自动',
+    'adapter.wechat': '微信公众号文章',
+    'adapter.x': 'X 文章 / 帖文',
+    'adapter.siderShare': 'Sider 分享页',
+    'adapter.genericPage': '普通网页',
+    'adapter.claude': 'Claude 对话',
+    'adapter.codex': 'Codex 对话',
+    'adapter.chatgpt': 'ChatGPT 对话',
+    'adapter.gemini': 'Gemini 对话',
+    'adapter.otherLlm': '其他大模型对话',
+    'adapter.genericChat': '通用对话',
+    'status.state': '状态',
+    'status.idle': '待处理',
+    'status.kind': '类型',
+    'status.blocks': '消息 / 块',
+    'status.branches': '分叉点',
+    'obsidian.title': 'Obsidian 输出',
+    'obsidian.refresh': '刷新 Vault',
+    'obsidian.detected': '已检测 Vault',
+    'obsidian.path': '仓库路径',
+    'obsidian.pathPlaceholder': '/Users/你/Documents/Obsidian',
+    'obsidian.folder': '保存目录',
+    'obsidian.submit': '存入 Obsidian',
+    'tabs.graph': '分支',
+    'tabs.report': '报告',
+    'tabs.json': '结构数据',
+    'tabs.annotate': '标注',
+    'tabs.dataset': '训练数据',
+    'toolbar.noFile': '暂无输出文件',
+    'toolbar.report': '生成分支报告',
+    'empty.title': '尚未载入对话图',
+    'empty.body': '读取浏览器插件会话、网页链接或导入文件',
+    'graph.branches': '分支对比',
+    'graph.mainline': '当前主分支',
+    'markdown.placeholder': '采集结果会出现在这里'
+  },
+  en: {
+    'brand.title': 'Wanwu Markdown',
+    'brand.tagline': 'Turn pages, AI chats, and plugin conversations you can save into Markdown.',
+    'source.web': 'Web pages',
+    'source.ai': 'AI chats',
+    'source.plugin': 'Browser plugin',
+    'source.import': 'Import file',
+    'web.noteTitle': 'Where the article URL comes from',
+    'web.note': 'Open a WeChat article, X post, or regular web page, then paste the address bar URL here.',
+    'web.url': 'Article URL',
+    'web.urlPlaceholder': 'https://mp.weixin.qq.com/s/... or https://x.com/.../status/...',
+    'web.adapter': 'Adapter',
+    'web.submit': 'Capture',
+    'ai.noteTitle': 'How to get an AI chat URL',
+    'ai.note': 'For Claude, ChatGPT, Gemini, or Codex web chats, open the target conversation and copy the address bar URL. To skip URLs, the browser plugin path can read Sider locally. Cloud chats still need an open page, official export, or authorized API.',
+    'ai.url': 'Chat page URL',
+    'ai.urlPlaceholder': 'https://claude.ai/chat/... or https://chatgpt.com/...',
+    'ai.adapter': 'Model source',
+    'ai.submit': 'Capture AI chat',
+    'plugin.noteTitle': 'Browser plugin',
+    'plugin.note': 'Currently supports Sider. No URL is needed: open the target Sider chat in Chrome, then click Detect again.',
+    'plugin.profile': 'Chrome profile',
+    'plugin.detect': 'Detect current chat',
+    'plugin.detecting': 'Detecting',
+    'plugin.waiting': 'Waiting for the current Sider chat',
+    'plugin.target': 'Target chat',
+    'plugin.manual': 'Advanced: enter chat ID manually',
+    'plugin.chatId': 'Chat ID',
+    'plugin.chatIdPlaceholder': 'Usually not needed',
+    'plugin.submit': 'Recover selected chat',
+    'import.noteTitle': 'When to import a file',
+    'import.note': 'You do not need to understand JSON first. Think of it as a recoverable archive file: past captures, structured conversations, or developer exports such as conversation.graph.json. Training drafts usually use dataset.jsonl.',
+    'import.choose': 'Choose import file',
+    'import.support': 'Supports JSON, messages, and conversation graph',
+    'import.submit': 'Import file',
+    'common.advanced': 'Advanced settings',
+    'common.saveAssets': 'Save images',
+    'common.includeProcess': 'Process / tools',
+    'common.visibleBrowser': 'Show browser',
+    'adapter.auto': 'Auto',
+    'adapter.wechat': 'WeChat article',
+    'adapter.x': 'X article / post',
+    'adapter.siderShare': 'Sider share page',
+    'adapter.genericPage': 'Generic page',
+    'adapter.claude': 'Claude chat',
+    'adapter.codex': 'Codex chat',
+    'adapter.chatgpt': 'ChatGPT chat',
+    'adapter.gemini': 'Gemini chat',
+    'adapter.otherLlm': 'Other LLM chat',
+    'adapter.genericChat': 'Generic chat',
+    'status.state': 'Status',
+    'status.idle': 'Idle',
+    'status.kind': 'Kind',
+    'status.blocks': 'Messages / blocks',
+    'status.branches': 'Branch points',
+    'obsidian.title': 'Obsidian output',
+    'obsidian.refresh': 'Refresh vaults',
+    'obsidian.detected': 'Detected vault',
+    'obsidian.path': 'Vault path',
+    'obsidian.pathPlaceholder': '/Users/you/Documents/Obsidian',
+    'obsidian.folder': 'Folder',
+    'obsidian.submit': 'Save to Obsidian',
+    'tabs.graph': 'Branches',
+    'tabs.report': 'Report',
+    'tabs.json': 'Structured data',
+    'tabs.annotate': 'Labels',
+    'tabs.dataset': 'Training data',
+    'toolbar.noFile': 'No output yet',
+    'toolbar.report': 'Build branch report',
+    'empty.title': 'No conversation graph loaded',
+    'empty.body': 'Read a browser plugin chat, capture a URL, or import a file',
+    'graph.branches': 'Branch comparison',
+    'graph.mainline': 'Current mainline',
+    'markdown.placeholder': 'Capture output will appear here'
+  }
+};
+
+const STATUS_TRANSLATIONS = {
+  已复制: 'Copied',
+  采集中: 'Capturing',
+  正在采集: 'Capturing',
+  '正在采集 AI 对话': 'Capturing AI chat',
+  正在恢复: 'Recovering',
+  请选择文件: 'Choose a file',
+  '请选择 JSON': 'Choose a JSON file',
+  正在导入: 'Importing',
+  导入失败: 'Import failed',
+  处理失败: 'Processing failed',
+  已完成: 'Done',
+  报告已生成: 'Report built',
+  待处理: 'Idle'
+};
+
 document.querySelectorAll('.source-switch button').forEach((button) => {
   button.addEventListener('click', () => setSource(button.dataset.source));
 });
@@ -75,10 +247,15 @@ elements.obsidianVaultSelect.addEventListener('change', () => {
 elements.obsidianVaultPath.addEventListener('input', saveObsidianSettings);
 elements.obsidianFolder.addEventListener('input', saveObsidianSettings);
 elements.obsidianExportButton.addEventListener('click', () => exportToObsidian(elements.obsidianExportButton));
+elements.languageSelect.addEventListener('change', () => {
+  state.language = elements.languageSelect.value;
+  localStorage.setItem('wanwu-language', state.language);
+  applyLanguage();
+});
 
 elements.jsonFileInput.addEventListener('change', () => {
   state.selectedJsonFile = elements.jsonFileInput.files?.[0] || null;
-  elements.jsonFileName.textContent = state.selectedJsonFile?.name || '选择对话 JSON';
+  elements.jsonFileName.textContent = state.selectedJsonFile?.name || t('import.choose');
 });
 
 document.querySelector('#copy-button').addEventListener('click', async () => {
@@ -103,6 +280,7 @@ elements.reportButton.addEventListener('click', () => {
   setStatus('报告已生成');
 });
 
+applyLanguage();
 loadSiderProfiles();
 loadObsidianSettings();
 loadObsidianVaults();
@@ -599,8 +777,29 @@ function safeFilename(value) {
   return String(value || 'capture').replace(/[<>:"/\\|?*\u0000-\u001f]/g, '-').replace(/\s+/g, '-').slice(0, 80);
 }
 
+function t(key) {
+  return I18N[state.language]?.[key] || I18N.zh[key] || key;
+}
+
+function applyLanguage() {
+  elements.languageSelect.value = state.language;
+  document.documentElement.lang = state.language === 'en' ? 'en' : 'zh-CN';
+  document.title = t('brand.title');
+  document.querySelectorAll('[data-i18n]').forEach((node) => {
+    node.textContent = t(node.dataset.i18n);
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach((node) => {
+    node.setAttribute('placeholder', t(node.dataset.i18nPlaceholder));
+  });
+  if (!state.selectedJsonFile) elements.jsonFileName.textContent = t('import.choose');
+  if (!state.result) {
+    elements.statusText.textContent = t('status.idle');
+    elements.fileOutput.textContent = t('toolbar.noFile');
+  }
+}
+
 function setStatus(text) {
-  elements.statusText.textContent = text;
+  elements.statusText.textContent = state.language === 'en' ? STATUS_TRANSLATIONS[text] || text : text;
 }
 
 function option(value, label, current) {

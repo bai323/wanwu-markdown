@@ -70,8 +70,22 @@ describe('万物 Markdown 对话工作台', () => {
     assert.match(html, /高级设置/);
     assert.match(html, /data-source-panel="web"[\s\S]*<details class="advanced-options">[\s\S]*适配器/);
     assert.match(html, /data-source-panel="ai"[\s\S]*<details class="advanced-options">[\s\S]*大模型来源/);
-    assert.match(html, /<summary>Obsidian 输出<\/summary>/);
+    assert.match(html, /<summary data-i18n="obsidian\.title">Obsidian 输出<\/summary>/);
     assert.doesNotMatch(html, /屠夫召回/);
+  });
+
+  it('提供中英文产品界面切换', async () => {
+    const html = await readFile('public/index.html', 'utf8');
+    const script = await readFile('public/app.js', 'utf8');
+
+    assert.match(html, /id="language-select"/);
+    assert.match(html, /<option value="zh">中文<\/option>/);
+    assert.match(html, /<option value="en">English<\/option>/);
+    assert.match(html, /data-i18n="brand\.tagline"/);
+    assert.match(script, /Wanwu Markdown/);
+    assert.match(script, /Web pages/);
+    assert.match(script, /Capture AI chat/);
+    assert.match(script, /localStorage\.setItem\('wanwu-language'/);
   });
 
   it('提供分支对比、模型图例、主分支和 HTML 报告入口', async () => {

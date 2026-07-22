@@ -81,6 +81,16 @@ button {
   gap: 12px;
 }
 
+.brand-copy {
+  min-width: 0;
+}
+
+.brand-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .brand-mark {
   display: grid;
   flex: 0 0 42px;
@@ -97,6 +107,21 @@ button {
   margin: 0;
   font-size: 20px;
   line-height: 1.2;
+}
+
+.language-switch {
+  flex: 0 0 auto;
+}
+
+.language-switch select {
+  min-height: 28px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--surface-soft);
+  padding: 3px 7px;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 11px;
 }
 
 .brand p {
