@@ -85,7 +85,8 @@ describe('万物 Markdown 对话工作台', () => {
     assert.match(html, /<option value="en">EN<\/option>/);
     assert.match(html, /data-i18n="brand\.tagline"/);
     assert.match(script, /Everything Markdown/);
-    assert.match(script, /Everything to Markdown, locally/);
+    assert.match(script, /Markdown, visual reports, and agent-ready archives/);
+    assert.match(script, /Markdown、美观报告和结构化资产/);
     assert.doesNotMatch(script, /Wanwu Markdown/);
     assert.match(script, /Personal digital assets/);
     assert.match(script, /Agent-ready Markdown/);

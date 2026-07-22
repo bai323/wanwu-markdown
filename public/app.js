@@ -54,7 +54,7 @@ elements.languageSelect = document.querySelector('#language-select');
 const I18N = {
   zh: {
     'brand.title': '万物 Markdown',
-    'brand.tagline': '一键整理你有权保存的网页、对话和资料',
+    'brand.tagline': '一键生成 Markdown、美观报告和结构化资产',
     'download.app': '下载 App',
     'download.note': '免费开源，本地优先',
     'feature.assets': '沉淀数字资产',
@@ -141,7 +141,7 @@ const I18N = {
   },
   en: {
     'brand.title': 'Everything Markdown',
-    'brand.tagline': 'Everything to Markdown, locally.',
+    'brand.tagline': 'Markdown, visual reports, and agent-ready archives.',
     'download.app': 'Download app',
     'download.note': 'Free, open source, local-first',
     'feature.assets': 'Personal digital assets',

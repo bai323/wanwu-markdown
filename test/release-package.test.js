@@ -14,8 +14,8 @@ describe('GitHub 发布包装', () => {
     assert.match(readme, /# Everything Markdown/);
     assert.doesNotMatch(readme, /Wanwu Markdown/);
     assert.match(readme, /Everything Markdown/);
-    assert.match(readme, /Everything to Markdown, locally/);
-    assert.match(readme, /Turn web pages, AI chats, and browser-plugin conversations into Markdown/);
+    assert.match(readme, /Markdown, visual reports, and agent-ready archives/);
+    assert.match(readme, /Turn web pages, AI chats, and browser-plugin conversations into Markdown, visual reports, and structured assets/);
     assert.match(readme, /!\[Everything Markdown product screenshot\]\(docs\/product-screenshot\.png\)/);
     assert.match(readme, /\[Beginner guide\]\(docs\/getting-started\.en\.md\)/);
     assert.match(readme, /\[Real examples\]\(docs\/examples\.en\.md\)/);
@@ -28,7 +28,7 @@ describe('GitHub 发布包装', () => {
     assert.match(readme, /visual capture reports/);
 
     assert.match(zhReadme, /# 万物 Markdown/);
-    assert.match(zhReadme, /把网页、AI 对话和浏览器插件里的内容整理成 Markdown/);
+    assert.match(zhReadme, /把网页、AI 对话和浏览器插件里的内容整理成 Markdown、美观报告和结构化资产/);
     assert.match(zhReadme, /\[新手教程\]\(docs\/getting-started\.zh-CN\.md\)/);
     assert.match(zhReadme, /\[真实使用示例\]\(docs\/examples\.zh-CN\.md\)/);
     assert.match(zhReadme, /\[下载 App\]\(https:\/\/github\.com\/bai323\/wanwu-markdown\/releases\/latest\)/);
