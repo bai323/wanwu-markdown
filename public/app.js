@@ -48,7 +48,11 @@ const elements = {
   obsidianIncludeDataset: document.querySelector('#obsidian-include-dataset'),
   obsidianIncludeReport: document.querySelector('#obsidian-include-report'),
   obsidianExportButton: document.querySelector('#obsidian-export-button'),
-  refreshVaultsButton: document.querySelector('#refresh-vaults-button')
+  refreshVaultsButton: document.querySelector('#refresh-vaults-button'),
+  settingsButton: document.querySelector('#settings-button'),
+  settingsCloseButton: document.querySelector('#settings-close-button'),
+  settingsPanel: document.querySelector('#settings-panel'),
+  autoLabelButton: document.querySelector('#auto-label-button')
 };
 
 elements.languageSelect = document.querySelector('#language-select');
@@ -59,19 +63,9 @@ const I18N = {
   zh: {
     'brand.title': '万物 Markdown',
     'brand.tagline': '一键生成 Markdown、美观报告和结构化资产',
-    'quick.title': '新手三步',
-    'quick.source': '先选内容来源',
-    'quick.sourceText': '网页、AI 对话、浏览器插件或导入文件。',
-    'quick.capture': '再点采集',
-    'quick.captureText': '需要登录或滚动时，用打开采集窗口。',
-    'quick.obsidian': '最后存入 Obsidian',
-    'quick.obsidianText': '生成 Markdown、报告和资产包。',
-    'feature.assets': '沉淀数字资产',
-    'feature.assetsText': '把网页和对话保存成自己的资料库。',
-    'feature.agent': 'Agent 优先格式',
-    'feature.agentText': 'Markdown、JSON、JSONL 都方便继续读取。',
-    'feature.report': '视觉采集报告',
-    'feature.reportText': '长对话分支可以被看见、比较和复盘。',
+    'settings.open': '设置',
+    'settings.close': '关闭设置',
+    'settings.title': '后台设置',
     'source.web': '网页文章',
     'source.ai': 'AI 对话',
     'source.plugin': '浏览器插件',
@@ -108,9 +102,14 @@ const I18N = {
     'common.saveAssets': '保存图片',
     'common.includeProcess': '过程 / 工具',
     'common.visibleBrowser': '显示浏览器',
+    'common.aiSaveAssets': 'AI 对话保存图片',
+    'common.aiIncludeProcess': 'AI 对话保留过程',
+    'common.aiVisibleBrowser': 'AI 对话显示浏览器',
+    'live.title': '实验功能',
     'live.open': '打开采集窗口',
     'live.capture': '采集当前窗口',
     'live.note': '适合需要登录、滚动或等待加载的大模型对话。',
+    'live.warning': '“打开采集窗口”会启动独立浏览器会话。如果一直转圈，请先用普通采集或浏览器插件。',
     'adapter.auto': '自动',
     'adapter.wechat': '微信公众号文章',
     'adapter.x': 'X 文章 / 帖文',
@@ -146,6 +145,9 @@ const I18N = {
     'toolbar.report': '生成分支报告',
     'toolbar.copy': '复制',
     'toolbar.download': '下载',
+    'annotate.title': '智能标注',
+    'annotate.note': 'AI 辅助生成初稿标签，你只需要复核关键样本。',
+    'annotate.auto': 'AI 生成标注初稿',
     'empty.title': '尚未载入对话图',
     'empty.body': '读取浏览器插件会话、网页链接或导入文件',
     'graph.branches': '分支对比',
@@ -155,19 +157,9 @@ const I18N = {
   en: {
     'brand.title': 'Everything Markdown',
     'brand.tagline': 'Markdown, visual reports, and agent-ready archives.',
-    'quick.title': 'First run',
-    'quick.source': 'Choose a source',
-    'quick.sourceText': 'Web page, AI chat, browser plugin, or import.',
-    'quick.capture': 'Capture it',
-    'quick.captureText': 'Use the capture window when login or scrolling is needed.',
-    'quick.obsidian': 'Save to Obsidian',
-    'quick.obsidianText': 'Create Markdown, reports, and an asset bundle.',
-    'feature.assets': 'Personal digital assets',
-    'feature.assetsText': 'Turn web pages and chats into your own archive.',
-    'feature.agent': 'Agent-ready Markdown',
-    'feature.agentText': 'Markdown, JSON, and JSONL stay easy to read later.',
-    'feature.report': 'Visual branch reports',
-    'feature.reportText': 'See, compare, and review long conversation branches.',
+    'settings.open': 'Settings',
+    'settings.close': 'Close settings',
+    'settings.title': 'Background settings',
     'source.web': 'Web pages',
     'source.ai': 'AI chats',
     'source.plugin': 'Browser plugin',
@@ -204,9 +196,14 @@ const I18N = {
     'common.saveAssets': 'Save images',
     'common.includeProcess': 'Process / tools',
     'common.visibleBrowser': 'Show browser',
+    'common.aiSaveAssets': 'Save AI chat images',
+    'common.aiIncludeProcess': 'Keep AI chat process',
+    'common.aiVisibleBrowser': 'Show browser for AI chats',
+    'live.title': 'Experimental',
     'live.open': 'Open capture window',
     'live.capture': 'Capture open window',
     'live.note': 'Best for chats that need login, scrolling, or time to load.',
+    'live.warning': 'Open capture window starts a separate browser session. If it keeps spinning, use regular capture or the browser plugin first.',
     'adapter.auto': 'Auto',
     'adapter.wechat': 'WeChat article',
     'adapter.x': 'X article / post',
@@ -242,6 +239,9 @@ const I18N = {
     'toolbar.report': 'Build branch report',
     'toolbar.copy': 'Copy',
     'toolbar.download': 'Download',
+    'annotate.title': 'Smart labels',
+    'annotate.note': 'AI drafts labels first, so you only review important samples.',
+    'annotate.auto': 'Draft labels with AI',
     'empty.title': 'No conversation graph loaded',
     'empty.body': 'Read a browser plugin chat, capture a URL, or import a file',
     'graph.branches': 'Branch comparison',
@@ -275,8 +275,10 @@ const STATUS_TRANSLATIONS = {
   处理失败: 'Processing failed',
   已完成: 'Done',
   '已打开采集窗口': 'Capture window opened',
+  '正在打开采集窗口': 'Opening capture window',
   '请先打开采集窗口': 'Open a capture window first',
   '正在采集当前窗口': 'Capturing open window',
+  '已生成标注初稿': 'Label draft generated',
   报告已生成: 'Report built',
   待处理: 'Idle'
 };
@@ -303,6 +305,9 @@ elements.liveCaptureButton.addEventListener('click', () => captureLiveWindow(ele
 elements.profileSelect.addEventListener('change', () => loadSiderConversations());
 elements.siderChatSelect.addEventListener('change', renderSelectedSiderChat);
 elements.refreshVaultsButton.addEventListener('click', () => loadObsidianVaults(true));
+elements.settingsButton.addEventListener('click', () => toggleSettings());
+elements.settingsCloseButton.addEventListener('click', () => toggleSettings(false));
+elements.autoLabelButton.addEventListener('click', draftLabels);
 elements.obsidianVaultSelect.addEventListener('change', () => {
   elements.obsidianVaultPath.value = elements.obsidianVaultSelect.value;
   saveObsidianSettings();
@@ -380,13 +385,16 @@ async function openLiveCapture(button) {
     return;
   }
 
-  setStatus('正在检测');
+  setStatus('正在打开采集窗口');
   button.disabled = true;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 20000);
   try {
     const response = await fetch('/api/live/open', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
+      signal: controller.signal
     });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || '打开失败');
@@ -394,8 +402,10 @@ async function openLiveCapture(button) {
     elements.liveCaptureButton.disabled = false;
     setStatus('已打开采集窗口');
   } catch (error) {
-    setStatus(error.message || '打开失败');
+    const message = error.name === 'AbortError' ? '打开超时，请先用普通采集或浏览器插件' : error.message || '打开失败';
+    setStatus(message);
   } finally {
+    clearTimeout(timeoutId);
     button.disabled = false;
   }
 }
@@ -484,6 +494,7 @@ function renderResult() {
   elements.branchCount.textContent = String(graph?.stats?.branchPointCount || 0);
   elements.fileOutput.textContent = files?.directory ? `输出：${files.directory}` : '已生成结果';
   elements.reportButton.disabled = !reportHtml;
+  elements.autoLabelButton.disabled = !doc.blocks?.length;
   elements.reportPreview.srcdoc = reportHtml || '';
   renderGraph(graph);
   renderAnnotations(doc);
@@ -637,6 +648,51 @@ function updateLabel(event) {
   block.labels[key] = key === 'reusable' ? event.target.value === 'true' : event.target.value;
   elements.jsonOutput.value = JSON.stringify(state.result.graph ? { graph: state.result.graph, document: state.result.document } : state.result.document, null, 2);
   elements.jsonlOutput.value = buildJsonl(state.result.document);
+}
+
+function draftLabels() {
+  if (!state.result?.document?.blocks?.length) {
+    setStatus('请先完成一次采集');
+    return;
+  }
+
+  state.result.document.blocks.forEach((block) => {
+    const text = `${block.contentMarkdown || ''} ${block.processMarkdown || ''}`;
+    const labels = block.labels || {};
+    labels.intent = labels.intent || inferIntent(block, text);
+    labels.quality = labels.quality && labels.quality !== 'unlabeled' ? labels.quality : inferQuality(block, text);
+    labels.reusable = labels.reusable ?? inferReusable(block, text);
+    labels.notes = labels.notes || inferNotes(block, text);
+    block.labels = labels;
+  });
+  elements.jsonOutput.value = JSON.stringify(state.result.graph ? { graph: state.result.graph, document: state.result.document } : state.result.document, null, 2);
+  elements.jsonlOutput.value = buildJsonl(state.result.document);
+  renderAnnotations(state.result.document);
+  setStatus('已生成标注初稿');
+}
+
+function inferIntent(block, text) {
+  if (block.role === 'user') return text.includes('?') || /吗|如何|为什么|怎么/.test(text) ? 'question' : 'instruction';
+  if (block.role === 'assistant') return text.length > 700 ? 'long_answer' : 'answer';
+  if (block.role === 'tool') return 'tool_result';
+  return block.type || 'message';
+}
+
+function inferQuality(block, text) {
+  if (!text.trim()) return 'bad';
+  if (block.role === 'assistant' && text.length > 300) return 'gold';
+  return text.length > 80 ? 'silver' : 'unlabeled';
+}
+
+function inferReusable(block, text) {
+  return block.role === 'assistant' && text.length > 160;
+}
+
+function inferNotes(block, text) {
+  if (block.processMarkdown) return '包含过程信息，适合复盘 agent 行为。';
+  if (block.attachments?.length) return '包含附件，适合进入对话资产包。';
+  if (block.role === 'assistant' && text.length > 300) return '内容较完整，可作为候选样本复核。';
+  return '';
 }
 
 async function loadSiderProfiles() {
@@ -804,6 +860,12 @@ function setGraphMode(mode) {
   state.graphMode = mode;
   document.querySelectorAll('[data-graph-mode]').forEach((button) => button.classList.toggle('active', button.dataset.graphMode === mode));
   document.querySelectorAll('.graph-view').forEach((view) => view.classList.toggle('active', view.id === `${mode}-view`));
+}
+
+function toggleSettings(forceOpen) {
+  const isOpen = forceOpen ?? elements.settingsPanel.hidden;
+  elements.settingsPanel.hidden = !isOpen;
+  elements.settingsButton.setAttribute('aria-expanded', String(isOpen));
 }
 
 function currentText() {
