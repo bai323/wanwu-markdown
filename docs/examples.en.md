@@ -55,11 +55,11 @@ Steps:
 
 Good for: long chats with branches where copy-paste loses structure.
 
-## Example 4: Build a branch report
+## Example 4: Review full-model branch alignment
 
-Goal: inspect different reply paths, branch points, and model sources in a long conversation.
+Goal: inspect different reply paths, branch points, and model sources in a long conversation as aligned comparison columns.
 
-![Visual branch report](cases/real-branch-report.en.svg)
+![Real full-model branch alignment report](cases/real-model-branch-alignment.png)
 
 Steps:
 
@@ -69,7 +69,7 @@ Steps:
 4. Click `Build branch report`.
 5. Preview the HTML report in the `Report` tab.
 
-Good for: comparing model replies, reviewing prompt iterations, and studying agent task traces.
+Good for: comparing model replies, reviewing prompt iterations, and studying agent task traces without losing branch context.
 
 ## Example 5: Export a training-data draft
 

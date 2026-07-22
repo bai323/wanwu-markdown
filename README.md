@@ -26,7 +26,11 @@ visual capture reports: long conversations should be visible. Branch reports sho
 
 ## Real Cases
 
-These public cases use a real captured Sider conversation as the source of structure and metrics. The visual examples only show selected, presentation-safe slices instead of uploading the full private conversation.
+These public cases use a real captured Sider conversation as the source of structure and metrics. The visual examples show selected, presentation-safe slices instead of uploading the full private conversation.
+
+Full-model branch alignment is the core report view: model legend, fork point, current answer, and alternate model replies stay aligned so the conversation can be compared instead of merely archived.
+
+![Real full-model branch alignment report](docs/cases/real-model-branch-alignment.png)
 
 ![Real Sider branch recovery](docs/cases/real-sider-branches.en.svg)
 

@@ -26,6 +26,8 @@ describe('GitHub 发布包装', () => {
     assert.match(readme, /Personal digital assets/);
     assert.match(readme, /agent-readable format/);
     assert.match(readme, /visual capture reports/);
+    assert.match(readme, /Full-model branch alignment/);
+    assert.match(readme, /!\[Real full-model branch alignment report\]\(docs\/cases\/real-model-branch-alignment\.png\)/);
 
     assert.match(zhReadme, /# 万物 Markdown/);
     assert.match(zhReadme, /把网页、AI 对话和浏览器插件里的内容整理成 Markdown、美观报告和结构化资产/);
@@ -37,6 +39,8 @@ describe('GitHub 发布包装', () => {
     assert.match(zhReadme, /沉淀属于自己的数字资产/);
     assert.match(zhReadme, /Agent 优先读取格式/);
     assert.match(zhReadme, /视觉友好的采集报告/);
+    assert.match(zhReadme, /全模型分支对齐/);
+    assert.match(zhReadme, /!\[真实全模型分支对齐报告\]\(docs\/cases\/real-model-branch-alignment\.png\)/);
     assert.match(license, /MIT License/);
     assert.match(privacy, /本地优先/);
     assert.match(checklist, /第一次发布到 GitHub/);
@@ -50,6 +54,7 @@ describe('GitHub 发布包装', () => {
     await access('docs/cases/real-sider-branches.en.svg');
     await access('docs/cases/real-branch-report.zh-CN.svg');
     await access('docs/cases/real-branch-report.en.svg');
+    await access('docs/cases/real-model-branch-alignment.png');
   });
 
   it('配置 CI 与忽略本地生成材料', async () => {
