@@ -1,7 +1,7 @@
 import { spawn } from 'node:child_process';
 import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { homedir, tmpdir } from 'node:os';
 import { basename, extname, join, resolve } from 'node:path';
 
 import { browserExtractPage } from './browser-extractor.js';
@@ -9,7 +9,9 @@ import { buildAssetManifest, createCaptureDocument, documentToJsonl, documentToM
 import { sanitizeFilename } from '../core/extractors.js';
 
 const DEFAULT_WAIT_MS = 4500;
-const PRIVATE_CHAT_EMPTY_MESSAGE = '没有读到对话内容。Kimi、Claude、ChatGPT 这类私有对话通常需要登录态：请切到「AI 对话」，在设置里使用「打开采集窗口」，登录并等待消息加载后再点「采集当前窗口」。';
+const APP_SUPPORT_DIR = process.env.WANWU_APP_SUPPORT_DIR || join(homedir(), 'Library', 'Application Support', 'WanwuMarkdown');
+const LIVE_PROFILE_DIR = process.env.WANWU_LIVE_PROFILE_DIR || join(APP_SUPPORT_DIR, 'browser-profile');
+const PRIVATE_CHAT_EMPTY_MESSAGE = '没有读到对话内容。Kimi、Claude、ChatGPT 这类私有对话需要在万物专用采集窗口登录：请切到「AI 对话」，点击「打开专用窗口」，首次登录后会保留状态，等消息加载后再点「采集已打开窗口」。';
 const liveSessions = new Map();
 
 export async function captureUrl(payload, options = {}) {
@@ -42,7 +44,9 @@ export async function captureUrl(payload, options = {}) {
     } else {
       browser.child.kill('SIGTERM');
       setTimeout(() => browser.child.kill('SIGKILL'), 1500).unref();
-      await rm(browser.profileDir, { recursive: true, force: true });
+      if (shouldRemoveProfile(browser)) {
+        await rm(browser.profileDir, { recursive: true, force: true });
+      }
     }
   }
 }
@@ -59,7 +63,9 @@ export async function openLiveCaptureSession(payload, options = {}) {
   const browser = await launchChrome({
     url: request.url,
     visible: true,
-    waitMs: payload.waitMs || 1000
+    waitMs: payload.waitMs || 1000,
+    profileDir: options.profileDir || LIVE_PROFILE_DIR,
+    persistentProfile: true
   });
   const sessionId = `live-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
   liveSessions.set(sessionId, {
@@ -73,7 +79,9 @@ export async function openLiveCaptureSession(payload, options = {}) {
     sessionId,
     url: request.url,
     openedAt: liveSessions.get(sessionId).openedAt,
-    mode: 'open-window-capture'
+    mode: 'open-window-capture',
+    profileMode: 'persistent',
+    loginHint: '首次登录后会保留在万物专用采集窗口'
   };
 }
 
@@ -107,16 +115,21 @@ export async function closeLiveCaptureSession(sessionId) {
   liveSessions.delete(sessionId);
   session.child.kill('SIGTERM');
   setTimeout(() => session.child.kill('SIGKILL'), 1500).unref();
-  await rm(session.profileDir, { recursive: true, force: true });
+  if (shouldRemoveProfile(session)) {
+    await rm(session.profileDir, { recursive: true, force: true });
+  }
   return { closed: true };
 }
 
-async function launchChrome({ url, visible, waitMs }) {
+async function launchChrome({ url, visible, waitMs, profileDir, persistentProfile = false }) {
   const chromePath = findChrome();
-  const profileDir = await mkdtemp(join(tmpdir(), 'wanwu-markdown-chrome-'));
+  const resolvedProfileDir = profileDir || await mkdtemp(join(tmpdir(), 'wanwu-markdown-chrome-'));
+  if (persistentProfile) {
+    await mkdir(resolvedProfileDir, { recursive: true });
+  }
   const args = [
     '--remote-debugging-port=0',
-    `--user-data-dir=${profileDir}`,
+    `--user-data-dir=${resolvedProfileDir}`,
     '--no-first-run',
     '--no-default-browser-check',
     '--disable-gpu',
@@ -130,7 +143,15 @@ async function launchChrome({ url, visible, waitMs }) {
   const child = spawn(chromePath, args, { stdio: ['ignore', 'ignore', 'pipe'] });
   const port = await waitForDevtoolsPort(child);
   await sleep(waitMs);
-  return { child, port, profileDir };
+  return { child, port, profileDir: resolvedProfileDir, persistentProfile };
+}
+
+export function liveCaptureProfileDir() {
+  return LIVE_PROFILE_DIR;
+}
+
+export function shouldRemoveProfile(browser) {
+  return !browser.persistentProfile;
 }
 
 function findChrome() {
