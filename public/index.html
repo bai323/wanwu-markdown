@@ -54,7 +54,7 @@
         <form id="ai-form" class="control-panel source-panel" data-source-panel="ai">
           <div class="source-note">
             <strong data-i18n="ai.noteTitle">AI 对话 URL 怎么拿</strong>
-            <span data-i18n="ai.note">Claude、ChatGPT、Gemini、Kimi、Codex 网页对话：打开目标对话后，复制浏览器地址栏里的链接。私有对话需要登录态，若采集为空，请到设置里用“打开采集窗口”。</span>
+            <span data-i18n="ai.note">Claude、ChatGPT、Gemini、Kimi、Codex 网页对话：打开目标对话后，复制浏览器地址栏里的链接。私有对话需要在万物专用窗口登录一次，之后会保留状态。</span>
           </div>
           <label class="field">
             <span data-i18n="ai.url">对话页面 URL</span>
@@ -63,10 +63,10 @@
 
           <section id="ai-private-flow" class="private-chat-panel">
             <strong data-i18n="private.title">私有对话读取</strong>
-            <span data-i18n="private.note">仅复制 URL 不能读取 Kimi 私有对话。先打开采集窗口登录，等消息加载后，再采集当前窗口。</span>
+            <span data-i18n="private.note">仅复制 URL 不能读取 Kimi 私有对话。打开万物专用登录窗口；首次登录后会保留状态，之后直接采集。</span>
             <div class="live-actions">
               <button id="ai-live-open-button" class="secondary-button" type="button">
-                <span aria-hidden="true">↗</span><span data-i18n="private.open">打开登录窗口</span>
+                <span aria-hidden="true">↗</span><span data-i18n="private.open">打开专用窗口</span>
               </button>
               <button id="ai-live-capture-button" class="secondary-button" type="button" disabled>
                 <span aria-hidden="true">●</span><span data-i18n="private.capture">采集已打开窗口</span>
@@ -190,7 +190,7 @@
 
           <section class="settings-section">
             <h3 data-i18n="live.title">实验功能</h3>
-            <p data-i18n="live.warning">“打开采集窗口”会启动独立浏览器会话。如果一直转圈，请先用普通采集或浏览器插件。</p>
+            <p data-i18n="live.warning">“打开采集窗口”会启动万物专用浏览器资料夹。首次登录后会保留状态；如果一直转圈，请关闭窗口后重试。</p>
             <div class="live-actions">
               <button id="live-open-button" class="secondary-button" type="button">
                 <span aria-hidden="true">↗</span><span data-i18n="live.open">打开采集窗口</span>

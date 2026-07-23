@@ -79,14 +79,14 @@ const I18N = {
     'web.adapter': '适配器',
     'web.submit': '开始采集',
     'ai.noteTitle': 'AI 对话 URL 怎么拿',
-    'ai.note': 'Claude、ChatGPT、Gemini、Kimi、Codex 网页对话：打开目标对话后，复制浏览器地址栏里的链接。私有对话需要登录态，若采集为空，请到设置里用“打开采集窗口”。',
+    'ai.note': 'Claude、ChatGPT、Gemini、Kimi、Codex 网页对话：打开目标对话后，复制浏览器地址栏里的链接。私有对话需要在万物专用窗口登录一次，之后会保留状态。',
     'ai.url': '对话页面 URL',
     'ai.urlPlaceholder': 'https://www.kimi.com/chat/... 或 https://claude.ai/chat/...',
     'ai.adapter': '大模型来源',
     'ai.submit': '采集 AI 对话',
     'private.title': '私有对话读取',
-    'private.note': '仅复制 URL 不能读取 Kimi 私有对话。先打开采集窗口登录，等消息加载后，再采集当前窗口。',
-    'private.open': '打开登录窗口',
+    'private.note': '仅复制 URL 不能读取 Kimi 私有对话。打开万物专用登录窗口；首次登录后会保留状态，之后直接采集。',
+    'private.open': '打开专用窗口',
     'private.capture': '采集已打开窗口',
     'plugin.noteTitle': '浏览器插件',
     'plugin.note': '当前支持：Sider 插件。Sider 插件不用 URL，先在 Chrome 的 Sider 中打开目标对话，再点击下方“重新检测”。',
@@ -115,7 +115,7 @@ const I18N = {
     'live.open': '打开采集窗口',
     'live.capture': '采集当前窗口',
     'live.note': '适合需要登录、滚动或等待加载的大模型对话。',
-    'live.warning': '“打开采集窗口”会启动独立浏览器会话。如果一直转圈，请先用普通采集或浏览器插件。',
+    'live.warning': '“打开采集窗口”会启动万物专用浏览器资料夹。首次登录后会保留状态；如果一直转圈，请关闭窗口后重试。',
     'adapter.auto': '自动',
     'adapter.wechat': '微信公众号文章',
     'adapter.x': 'X 文章 / 帖文',
@@ -178,14 +178,14 @@ const I18N = {
     'web.adapter': 'Adapter',
     'web.submit': 'Capture',
     'ai.noteTitle': 'How to get an AI chat URL',
-    'ai.note': 'For Claude, ChatGPT, Gemini, Kimi, or Codex web chats, open the target conversation and copy the address bar URL. Private chats need a signed-in session; if capture is empty, use Open capture window in Settings.',
+    'ai.note': 'For Claude, ChatGPT, Gemini, Kimi, or Codex web chats, open the target conversation and copy the address bar URL. Private chats sign in once inside the Everything Markdown window, then keep that session.',
     'ai.url': 'Chat page URL',
     'ai.urlPlaceholder': 'https://www.kimi.com/chat/... or https://claude.ai/chat/...',
     'ai.adapter': 'Model source',
     'ai.submit': 'Capture AI chat',
     'private.title': 'Private chat capture',
-    'private.note': 'A URL alone cannot read private Kimi chats. Open a capture window, sign in, wait for messages to load, then capture that window.',
-    'private.open': 'Open sign-in window',
+    'private.note': 'A URL alone cannot read private Kimi chats. Open the dedicated sign-in window; after the first sign-in, the session is kept for future captures.',
+    'private.open': 'Open dedicated window',
     'private.capture': 'Capture open window',
     'plugin.noteTitle': 'Browser plugin',
     'plugin.note': 'Currently supports Sider. No URL is needed: open the target Sider chat in Chrome, then click Detect again.',
@@ -214,7 +214,7 @@ const I18N = {
     'live.open': 'Open capture window',
     'live.capture': 'Capture open window',
     'live.note': 'Best for chats that need login, scrolling, or time to load.',
-    'live.warning': 'Open capture window starts a separate browser session. If it keeps spinning, use regular capture or the browser plugin first.',
+    'live.warning': 'Open capture window starts an Everything Markdown browser profile. After the first sign-in, it keeps your session; if it keeps spinning, close the window and try again.',
     'adapter.auto': 'Auto',
     'adapter.wechat': 'WeChat article',
     'adapter.x': 'X article / post',
@@ -424,7 +424,7 @@ async function openLiveCapture(button) {
     elements.aiLiveCaptureButton.disabled = false;
     setStatus('已打开采集窗口');
   } catch (error) {
-    const message = error.name === 'AbortError' ? '打开超时，请先用普通采集或浏览器插件' : error.message || '打开失败';
+    const message = error.name === 'AbortError' ? '打开超时，请关闭专用窗口后重试' : error.message || '打开失败';
     setStatus(message);
   } finally {
     clearTimeout(timeoutId);
