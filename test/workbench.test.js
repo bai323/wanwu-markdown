@@ -55,6 +55,10 @@ describe('万物 Markdown 对话工作台', () => {
     assert.match(html, /Codex 网页对话/);
     assert.match(html, /私有对话需要登录态/);
     assert.match(html, /打开采集窗口/);
+    assert.match(html, /id="ai-private-flow"/);
+    assert.match(html, /id="ai-live-open-button"/);
+    assert.match(html, /id="ai-live-capture-button"/);
+    assert.match(html, /仅复制 URL 不能读取 Kimi 私有对话/);
     assert.match(html, /Sider 插件不用 URL/);
     assert.match(html, /不用先理解 JSON/);
     assert.match(html, /可以把它理解成“可恢复的存档文件”/);
@@ -143,6 +147,8 @@ describe('万物 Markdown 对话工作台', () => {
     assert.match(script, /\/api\/live\/capture/);
     assert.match(script, /AbortController/);
     assert.match(script, /打开超时，请先用普通采集或浏览器插件/);
+    assert.match(script, /isPrivateAiUrl/);
+    assert.match(script, /openLiveCapture/);
     assert.match(script, /manifest\.json/);
   });
 

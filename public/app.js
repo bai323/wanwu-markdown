@@ -52,7 +52,9 @@ const elements = {
   settingsButton: document.querySelector('#settings-button'),
   settingsCloseButton: document.querySelector('#settings-close-button'),
   settingsPanel: document.querySelector('#settings-panel'),
-  autoLabelButton: document.querySelector('#auto-label-button')
+  autoLabelButton: document.querySelector('#auto-label-button'),
+  aiLiveOpenButton: document.querySelector('#ai-live-open-button'),
+  aiLiveCaptureButton: document.querySelector('#ai-live-capture-button')
 };
 
 elements.languageSelect = document.querySelector('#language-select');
@@ -82,6 +84,10 @@ const I18N = {
     'ai.urlPlaceholder': 'https://www.kimi.com/chat/... 或 https://claude.ai/chat/...',
     'ai.adapter': '大模型来源',
     'ai.submit': '采集 AI 对话',
+    'private.title': '私有对话读取',
+    'private.note': '仅复制 URL 不能读取 Kimi 私有对话。先打开采集窗口登录，等消息加载后，再采集当前窗口。',
+    'private.open': '打开登录窗口',
+    'private.capture': '采集已打开窗口',
     'plugin.noteTitle': '浏览器插件',
     'plugin.note': '当前支持：Sider 插件。Sider 插件不用 URL，先在 Chrome 的 Sider 中打开目标对话，再点击下方“重新检测”。',
     'plugin.profile': 'Chrome 配置',
@@ -177,6 +183,10 @@ const I18N = {
     'ai.urlPlaceholder': 'https://www.kimi.com/chat/... or https://claude.ai/chat/...',
     'ai.adapter': 'Model source',
     'ai.submit': 'Capture AI chat',
+    'private.title': 'Private chat capture',
+    'private.note': 'A URL alone cannot read private Kimi chats. Open a capture window, sign in, wait for messages to load, then capture that window.',
+    'private.open': 'Open sign-in window',
+    'private.capture': 'Capture open window',
     'plugin.noteTitle': 'Browser plugin',
     'plugin.note': 'Currently supports Sider. No URL is needed: open the target Sider chat in Chrome, then click Detect again.',
     'plugin.profile': 'Chrome profile',
@@ -304,6 +314,8 @@ elements.jsonForm.addEventListener('submit', handleJsonImport);
 elements.detectSiderButton.addEventListener('click', () => loadSiderConversations(true));
 elements.liveOpenButton.addEventListener('click', () => openLiveCapture(elements.liveOpenButton));
 elements.liveCaptureButton.addEventListener('click', () => captureLiveWindow(elements.liveCaptureButton));
+elements.aiLiveOpenButton.addEventListener('click', () => openLiveCapture(elements.aiLiveOpenButton));
+elements.aiLiveCaptureButton.addEventListener('click', () => captureLiveWindow(elements.aiLiveCaptureButton));
 elements.profileSelect.addEventListener('change', () => loadSiderConversations());
 elements.siderChatSelect.addEventListener('change', renderSelectedSiderChat);
 elements.refreshVaultsButton.addEventListener('click', () => loadObsidianVaults(true));
@@ -377,6 +389,13 @@ async function handleAiCapture(event) {
     includeProcess: document.querySelector('#ai-include-process').checked,
     visibleBrowser: document.querySelector('#ai-visible-browser').checked
   };
+
+  if (isPrivateAiUrl(payload.url)) {
+    setStatus('私有对话需要登录窗口，正在打开');
+    await openLiveCapture(event.submitter);
+    return;
+  }
+
   await runRequest('/api/capture', payload, event.submitter, '正在采集 AI 对话');
 }
 
@@ -402,6 +421,7 @@ async function openLiveCapture(button) {
     if (!response.ok) throw new Error(data.error || '打开失败');
     state.liveSessionId = data.sessionId;
     elements.liveCaptureButton.disabled = false;
+    elements.aiLiveCaptureButton.disabled = false;
     setStatus('已打开采集窗口');
   } catch (error) {
     const message = error.name === 'AbortError' ? '打开超时，请先用普通采集或浏览器插件' : error.message || '打开失败';
@@ -887,6 +907,10 @@ function livePayload() {
     saveAssets: isAi ? document.querySelector('#ai-save-assets').checked : document.querySelector('#save-assets').checked,
     includeProcess: isAi ? document.querySelector('#ai-include-process').checked : document.querySelector('#include-process').checked
   };
+}
+
+function isPrivateAiUrl(url) {
+  return /(kimi\.com\/chat\/|claude\.ai\/chat\/|chatgpt\.com\/c\/|gemini\.google\.com\/app\/)/i.test(String(url || ''));
 }
 
 function buildClientManifest(doc = {}, files = {}) {

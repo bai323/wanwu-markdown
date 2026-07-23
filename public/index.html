@@ -61,6 +61,19 @@
             <input id="ai-url-input" name="url" type="url" placeholder="https://www.kimi.com/chat/... 或 https://claude.ai/chat/..." data-i18n-placeholder="ai.urlPlaceholder" />
           </label>
 
+          <section id="ai-private-flow" class="private-chat-panel">
+            <strong data-i18n="private.title">私有对话读取</strong>
+            <span data-i18n="private.note">仅复制 URL 不能读取 Kimi 私有对话。先打开采集窗口登录，等消息加载后，再采集当前窗口。</span>
+            <div class="live-actions">
+              <button id="ai-live-open-button" class="secondary-button" type="button">
+                <span aria-hidden="true">↗</span><span data-i18n="private.open">打开登录窗口</span>
+              </button>
+              <button id="ai-live-capture-button" class="secondary-button" type="button" disabled>
+                <span aria-hidden="true">●</span><span data-i18n="private.capture">采集已打开窗口</span>
+              </button>
+            </div>
+          </section>
+
           <button class="primary-button" type="submit"><span aria-hidden="true">↓</span><span data-i18n="ai.submit">采集 AI 对话</span></button>
         </form>
 
