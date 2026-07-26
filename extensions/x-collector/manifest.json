@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "Everything Markdown X Collector",
+  "name": "Everything Markdown Collector",
   "version": "0.1.0",
-  "description": "Collect visible X likes/bookmarks into Everything Markdown.",
+  "description": "Collect X likes/bookmarks and WeChat articles into Everything Markdown.",
   "permissions": ["activeTab", "scripting", "clipboardWrite"],
-  "host_permissions": ["https://x.com/*", "https://twitter.com/*", "http://localhost:4173/*"],
+  "host_permissions": ["https://x.com/*", "https://twitter.com/*", "https://mp.weixin.qq.com/*", "http://localhost:4173/*"],
   "action": {
     "default_popup": "popup.html"
   }
