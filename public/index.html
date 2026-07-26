@@ -35,6 +35,7 @@
           <button class="active" type="button" data-source="web" data-i18n="source.web">网页文章</button>
           <button type="button" data-source="ai" data-i18n="source.ai">AI 对话</button>
           <button type="button" data-source="sider" data-i18n="source.plugin">浏览器插件</button>
+          <button type="button" data-source="x" data-i18n="source.x">X 收藏 / 点赞</button>
           <button type="button" data-source="json" data-i18n="source.import">导入文件</button>
         </div>
 
@@ -46,6 +47,10 @@
           <label class="field">
             <span data-i18n="web.url">文章 URL</span>
             <input id="url-input" name="url" type="url" placeholder="https://mp.weixin.qq.com/s/... 或 https://x.com/.../status/..." data-i18n-placeholder="web.urlPlaceholder" />
+          </label>
+          <label class="field">
+            <span data-i18n="web.batchTitle">微信正在阅读</span>
+            <textarea id="batch-url-input" class="batch-textarea" placeholder="一次粘贴多条公众号文章链接，每行一条；也可以粘贴微信分享文本，系统会自动提取链接。" data-i18n-placeholder="web.batchPlaceholder"></textarea>
           </label>
 
           <button class="primary-button" type="submit"><span aria-hidden="true">↓</span><span data-i18n="web.submit">开始采集</span></button>
@@ -97,6 +102,39 @@
           </label>
           <input id="chat-id-input" class="visually-hidden" type="text" autocomplete="off" />
           <button class="primary-button" type="submit"><span aria-hidden="true">↺</span><span data-i18n="plugin.submit">恢复所选对话</span></button>
+        </form>
+
+        <form id="x-form" class="control-panel source-panel" data-source-panel="x">
+          <div class="source-note">
+            <strong data-i18n="x.noteTitle">X 收藏 / 点赞</strong>
+            <span data-i18n="x.note">第二阶段：安装浏览器扩展，在 Bookmarks 或 Likes 页面导出可见内容；第三阶段：连接 X 官方 API，同步自己的 Likes / Bookmarks。</span>
+          </div>
+          <label class="field">
+            <span data-i18n="x.collection">采集范围</span>
+            <select id="x-collection-select">
+              <option value="bookmarks" data-i18n="x.bookmarks">Bookmarks 收藏</option>
+              <option value="likes" data-i18n="x.likes">Likes 点赞</option>
+              <option value="visible" data-i18n="x.visible">当前页面可见内容</option>
+            </select>
+          </label>
+          <label class="field">
+            <span data-i18n="x.json">浏览器扩展 JSON</span>
+            <textarea id="x-json-input" class="batch-textarea" placeholder="从万物 X 采集扩展复制 JSON，或粘贴 xarchive / 其他导出的 posts 数组。" data-i18n-placeholder="x.jsonPlaceholder"></textarea>
+          </label>
+          <button class="primary-button" type="submit"><span aria-hidden="true">↑</span><span data-i18n="x.import">导入 X 数据</span></button>
+          <div class="source-note quiet">
+            <strong data-i18n="x.apiTitle">官方 API 同步</strong>
+            <span data-i18n="x.apiNote">Token 只发给本机服务，不写入文件；建议先用最小权限读取自己的数据。</span>
+          </div>
+          <label class="field">
+            <span data-i18n="x.userId">X User ID</span>
+            <input id="x-user-id" type="text" autocomplete="off" placeholder="例如 44196397" />
+          </label>
+          <label class="field">
+            <span data-i18n="x.token">Bearer Token</span>
+            <input id="x-bearer-token" type="password" autocomplete="off" placeholder="不保存，仅本次同步使用" data-i18n-placeholder="x.tokenPlaceholder" />
+          </label>
+          <button id="x-sync-button" class="secondary-button" type="button"><span aria-hidden="true">↻</span><span data-i18n="x.sync">同步 X 官方 API</span></button>
         </form>
 
         <form id="json-form" class="control-panel source-panel" data-source-panel="json">

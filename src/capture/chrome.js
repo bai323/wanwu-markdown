@@ -5,6 +5,7 @@ import { homedir, tmpdir } from 'node:os';
 import { basename, extname, join, resolve } from 'node:path';
 
 import { browserExtractPage } from './browser-extractor.js';
+import { documentToHtmlReport } from '../core/document-report.js';
 import { buildAssetManifest, createCaptureDocument, documentToJsonl, documentToMarkdown, validateCaptureRequest } from '../core/schema.js';
 import { sanitizeFilename } from '../core/extractors.js';
 
@@ -291,11 +292,13 @@ async function capturePageToBundle(page, request, options = {}) {
     const markdown = documentToMarkdown(doc);
     const jsonl = documentToJsonl(doc);
     const json = JSON.stringify(doc, null, 2);
+    const reportHtml = documentToHtmlReport(doc);
     const files = {
       directory: runDir,
       markdown: join(runDir, 'document.md'),
       json: join(runDir, 'document.json'),
       jsonl: join(runDir, 'dataset.jsonl'),
+      report: join(runDir, 'reading-report.html'),
       manifest: join(runDir, 'manifest.json')
     };
     const manifest = buildAssetManifest(doc, files);
@@ -304,10 +307,11 @@ async function capturePageToBundle(page, request, options = {}) {
       writeFile(files.markdown, markdown, 'utf8'),
       writeFile(files.json, json, 'utf8'),
       writeFile(files.jsonl, jsonl, 'utf8'),
+      writeFile(files.report, reportHtml, 'utf8'),
       writeFile(files.manifest, JSON.stringify(manifest, null, 2), 'utf8')
     ]);
 
-    return { document: doc, markdown, json, jsonl, manifest, files };
+    return { document: doc, markdown, json, jsonl, reportHtml, manifest, files };
   } finally {
     await client.close();
   }

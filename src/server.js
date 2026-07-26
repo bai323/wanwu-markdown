@@ -3,8 +3,10 @@ import { readFile } from 'node:fs/promises';
 import { extname, join, resolve } from 'node:path';
 
 import { captureLiveSession, captureUrl, closeLiveCaptureSession, openLiveCaptureSession } from './capture/chrome.js';
+import { exportBatchCaptureResults, extractHttpUrls } from './core/batch-capture.js';
 import { exportConversationPayload } from './core/conversation-export.js';
 import { exportToObsidian, findObsidianVaults } from './core/obsidian-export.js';
+import { exportXCollectionPayload, fetchXCollection } from './core/x-collection.js';
 import { inspectSiderConversations, listSiderProfiles, recoverSiderConversation } from './importers/sider-local.js';
 
 const PORT = Number(process.env.PORT || 4173);
@@ -23,6 +25,33 @@ const server = createServer(async (req, res) => {
     if (req.method === 'POST' && req.url === '/api/capture') {
       const payload = await readJsonBody(req);
       const result = await captureUrl(payload);
+      return sendJson(res, 200, result);
+    }
+
+    if (req.method === 'POST' && req.url === '/api/batch/capture') {
+      const payload = await readJsonBody(req);
+      const urls = extractHttpUrls([payload.url, payload.text, ...(Array.isArray(payload.urls) ? payload.urls : [])].filter(Boolean).join('\n')).slice(0, 20);
+      if (!urls.length) {
+        const error = new Error('没有找到可采集的链接');
+        error.statusCode = 400;
+        throw error;
+      }
+
+      const items = [];
+      for (const url of urls) {
+        try {
+          const result = await captureUrl({
+            ...payload,
+            url,
+            adapter: payload.adapter || 'auto'
+          });
+          items.push({ ok: true, url, result });
+        } catch (error) {
+          items.push({ ok: false, url, error: error.message || '采集失败' });
+        }
+      }
+
+      const result = await exportBatchCaptureResults(items);
       return sendJson(res, 200, result);
     }
 
@@ -86,6 +115,28 @@ const server = createServer(async (req, res) => {
         adapter: 'json-import'
       });
       return sendJson(res, 200, result);
+    }
+
+    if (req.method === 'POST' && req.url === '/api/x/import') {
+      const body = await readJsonBody(req);
+      const result = await exportXCollectionPayload(body.payload || body);
+      return sendJson(res, 200, result);
+    }
+
+    if (req.method === 'POST' && req.url === '/api/x/sync') {
+      const body = await readJsonBody(req);
+      const payload = await fetchXCollection({
+        userId: body.userId,
+        collection: body.collection,
+        bearerToken: body.bearerToken || process.env.X_BEARER_TOKEN,
+        maxResults: body.maxResults,
+        paginationToken: body.paginationToken
+      });
+      const result = await exportXCollectionPayload(payload);
+      return sendJson(res, 200, {
+        ...result,
+        nextToken: payload.nextToken
+      });
     }
 
     if (req.method === 'POST' && req.url === '/api/obsidian/export') {

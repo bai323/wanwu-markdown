@@ -28,6 +28,37 @@ describe('万物 Markdown 对话工作台', () => {
     assert.match(script, /当前选中/);
   });
 
+  it('提供微信正在阅读的批量采集入口', async () => {
+    const html = await readFile('public/index.html', 'utf8');
+    const script = await readFile('public/app.js', 'utf8');
+    const server = await readFile('src/server.js', 'utf8');
+
+    assert.match(html, /微信正在阅读/);
+    assert.match(html, /id="batch-url-input"/);
+    assert.match(html, /一次粘贴多条公众号文章链接/);
+    assert.match(script, /extractHttpUrls/);
+    assert.match(script, /\/api\/batch\/capture/);
+    assert.match(server, /\/api\/batch\/capture/);
+  });
+
+  it('提供 X 收藏点赞的插件采集和官方 API 同步入口', async () => {
+    const html = await readFile('public/index.html', 'utf8');
+    const script = await readFile('public/app.js', 'utf8');
+    const server = await readFile('src/server.js', 'utf8');
+
+    assert.match(html, /data-source="x"/);
+    assert.match(html, /X 收藏 \/ 点赞/);
+    assert.match(html, /id="x-json-input"/);
+    assert.match(html, /id="x-bearer-token"/);
+    assert.match(html, /id="x-sync-button"/);
+    assert.match(script, /handleXImport/);
+    assert.match(script, /handleXSync/);
+    assert.match(script, /\/api\/x\/import/);
+    assert.match(script, /\/api\/x\/sync/);
+    assert.match(server, /\/api\/x\/import/);
+    assert.match(server, /\/api\/x\/sync/);
+  });
+
   it('提供一键写入 Obsidian Vault 的资产出口', async () => {
     const html = await readFile('public/index.html', 'utf8');
     const script = await readFile('public/app.js', 'utf8');

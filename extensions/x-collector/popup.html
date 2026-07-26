@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body{width:280px;margin:0;padding:14px;background:#fbfaf7;color:#20242c;font:13px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+      h1{margin:0 0 8px;font-size:16px}p{margin:0 0 12px;color:#667085}
+      button{width:100%;border:1px solid #d8d4ca;border-radius:7px;background:#fff;padding:9px 10px;color:#20242c;font:inherit;cursor:pointer}
+      button.primary{border-color:#6d5df2;background:#6d5df2;color:#fff;font-weight:700}
+      button+button{margin-top:8px}.status{min-height:18px;margin-top:10px;color:#287c66}
+    </style>
+  </head>
+  <body>
+    <h1>万物 X 采集</h1>
+    <p>在 X Bookmarks / Likes 页面滚动到想保存的位置，再采集可见帖文。</p>
+    <button id="send" class="primary" type="button">发送到万物 Markdown</button>
+    <button id="copy" type="button">复制 JSON</button>
+    <div id="status" class="status"></div>
+    <script src="popup.js"></script>
+  </body>
+</html>

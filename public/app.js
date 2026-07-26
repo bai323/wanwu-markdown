@@ -15,7 +15,9 @@ const elements = {
   captureForm: document.querySelector('#capture-form'),
   aiForm: document.querySelector('#ai-form'),
   siderForm: document.querySelector('#sider-form'),
+  xForm: document.querySelector('#x-form'),
   jsonForm: document.querySelector('#json-form'),
+  batchUrlInput: document.querySelector('#batch-url-input'),
   profileSelect: document.querySelector('#profile-select'),
   siderChatSelect: document.querySelector('#sider-chat-select'),
   detectedChat: document.querySelector('#detected-chat'),
@@ -54,7 +56,12 @@ const elements = {
   settingsPanel: document.querySelector('#settings-panel'),
   autoLabelButton: document.querySelector('#auto-label-button'),
   aiLiveOpenButton: document.querySelector('#ai-live-open-button'),
-  aiLiveCaptureButton: document.querySelector('#ai-live-capture-button')
+  aiLiveCaptureButton: document.querySelector('#ai-live-capture-button'),
+  xCollectionSelect: document.querySelector('#x-collection-select'),
+  xJsonInput: document.querySelector('#x-json-input'),
+  xUserId: document.querySelector('#x-user-id'),
+  xBearerToken: document.querySelector('#x-bearer-token'),
+  xSyncButton: document.querySelector('#x-sync-button')
 };
 
 elements.languageSelect = document.querySelector('#language-select');
@@ -71,11 +78,14 @@ const I18N = {
     'source.web': '网页文章',
     'source.ai': 'AI 对话',
     'source.plugin': '浏览器插件',
+    'source.x': 'X 收藏 / 点赞',
     'source.import': '导入文件',
     'web.noteTitle': '文章 URL 从哪里来',
     'web.note': '打开微信公众号文章、X 帖文或普通网页，复制浏览器地址栏里的链接，粘贴到下方。',
     'web.url': '文章 URL',
     'web.urlPlaceholder': 'https://mp.weixin.qq.com/s/... 或 https://x.com/.../status/...',
+    'web.batchTitle': '微信正在阅读',
+    'web.batchPlaceholder': '一次粘贴多条公众号文章链接，每行一条；也可以粘贴微信分享文本，系统会自动提取链接。',
     'web.adapter': '适配器',
     'web.submit': '开始采集',
     'ai.noteTitle': 'AI 对话 URL 怎么拿',
@@ -99,6 +109,21 @@ const I18N = {
     'plugin.chatId': '会话 ID',
     'plugin.chatIdPlaceholder': '通常无需填写',
     'plugin.submit': '恢复所选对话',
+    'x.noteTitle': 'X 收藏 / 点赞',
+    'x.note': '第二阶段：安装浏览器扩展，在 Bookmarks 或 Likes 页面导出可见内容；第三阶段：连接 X 官方 API，同步自己的 Likes / Bookmarks。',
+    'x.collection': '采集范围',
+    'x.bookmarks': 'Bookmarks 收藏',
+    'x.likes': 'Likes 点赞',
+    'x.visible': '当前页面可见内容',
+    'x.json': '浏览器扩展 JSON',
+    'x.jsonPlaceholder': '从万物 X 采集扩展复制 JSON，或粘贴 xarchive / 其他导出的 posts 数组。',
+    'x.import': '导入 X 数据',
+    'x.apiTitle': '官方 API 同步',
+    'x.apiNote': 'Token 只发给本机服务，不写入文件；建议先用最小权限读取自己的数据。',
+    'x.userId': 'X User ID',
+    'x.token': 'Bearer Token',
+    'x.tokenPlaceholder': '不保存，仅本次同步使用',
+    'x.sync': '同步 X 官方 API',
     'import.noteTitle': '导入文件是什么场景',
     'import.note': '不用先理解 JSON，可以把它理解成“可恢复的存档文件”。适合导入历史采集结果、别人给你的结构化对话或开发者数据，例如 conversation.graph.json；训练标注数据通常看 dataset.jsonl。',
     'import.choose': '选择导入文件',
@@ -170,11 +195,14 @@ const I18N = {
     'source.web': 'Web pages',
     'source.ai': 'AI chats',
     'source.plugin': 'Browser plugin',
+    'source.x': 'X saved',
     'source.import': 'Import file',
     'web.noteTitle': 'Where the article URL comes from',
     'web.note': 'Open a WeChat article, X post, or regular web page, then paste the address bar URL here.',
     'web.url': 'Article URL',
     'web.urlPlaceholder': 'https://mp.weixin.qq.com/s/... or https://x.com/.../status/...',
+    'web.batchTitle': 'WeChat reading list',
+    'web.batchPlaceholder': 'Paste multiple WeChat article links, one per line. Shared text is fine; links will be extracted automatically.',
     'web.adapter': 'Adapter',
     'web.submit': 'Capture',
     'ai.noteTitle': 'How to get an AI chat URL',
@@ -198,6 +226,21 @@ const I18N = {
     'plugin.chatId': 'Chat ID',
     'plugin.chatIdPlaceholder': 'Usually not needed',
     'plugin.submit': 'Recover selected chat',
+    'x.noteTitle': 'X likes / bookmarks',
+    'x.note': 'Phase 2: install the browser extension and export visible content from Bookmarks or Likes. Phase 3: connect the official X API to sync your own Likes / Bookmarks.',
+    'x.collection': 'Collection',
+    'x.bookmarks': 'Bookmarks',
+    'x.likes': 'Likes',
+    'x.visible': 'Visible page',
+    'x.json': 'Browser extension JSON',
+    'x.jsonPlaceholder': 'Paste JSON copied from the Everything Markdown X extension, xarchive, or another posts export.',
+    'x.import': 'Import X data',
+    'x.apiTitle': 'Official API sync',
+    'x.apiNote': 'The token is sent only to the local service and is not written to disk. Use the narrowest read scope first.',
+    'x.userId': 'X User ID',
+    'x.token': 'Bearer Token',
+    'x.tokenPlaceholder': 'Not saved; used only for this sync',
+    'x.sync': 'Sync X official API',
     'import.noteTitle': 'When to import a file',
     'import.note': 'You do not need to understand JSON first. Think of it as a recoverable archive file: past captures, structured conversations, or developer exports such as conversation.graph.json. Training drafts usually use dataset.jsonl.',
     'import.choose': 'Choose import file',
@@ -290,6 +333,8 @@ const STATUS_TRANSLATIONS = {
   '正在打开采集窗口': 'Opening capture window',
   '请先打开采集窗口': 'Open a capture window first',
   '正在采集当前窗口': 'Capturing open window',
+  '正在导入 X 数据': 'Importing X data',
+  '正在同步 X 官方 API': 'Syncing X official API',
   '已生成标注初稿': 'Label draft generated',
   报告已生成: 'Report built',
   待处理: 'Idle'
@@ -310,6 +355,7 @@ document.querySelectorAll('[data-graph-mode]').forEach((button) => {
 elements.captureForm.addEventListener('submit', handleWebCapture);
 elements.aiForm.addEventListener('submit', handleAiCapture);
 elements.siderForm.addEventListener('submit', handleSiderRecover);
+elements.xForm.addEventListener('submit', handleXImport);
 elements.jsonForm.addEventListener('submit', handleJsonImport);
 elements.detectSiderButton.addEventListener('click', () => loadSiderConversations(true));
 elements.liveOpenButton.addEventListener('click', () => openLiveCapture(elements.liveOpenButton));
@@ -322,6 +368,7 @@ elements.refreshVaultsButton.addEventListener('click', () => loadObsidianVaults(
 elements.settingsButton.addEventListener('click', () => toggleSettings());
 elements.settingsCloseButton.addEventListener('click', () => toggleSettings(false));
 elements.autoLabelButton.addEventListener('click', draftLabels);
+elements.xSyncButton.addEventListener('click', () => handleXSync(elements.xSyncButton));
 elements.obsidianVaultSelect.addEventListener('change', () => {
   elements.obsidianVaultPath.value = elements.obsidianVaultSelect.value;
   saveObsidianSettings();
@@ -370,6 +417,7 @@ loadObsidianVaults();
 
 async function handleWebCapture(event) {
   event.preventDefault();
+  const pastedUrls = extractHttpUrls(`${document.querySelector('#url-input').value}\n${elements.batchUrlInput.value}`);
   const payload = {
     url: document.querySelector('#url-input').value.trim(),
     adapter: document.querySelector('#adapter-select').value,
@@ -377,6 +425,16 @@ async function handleWebCapture(event) {
     includeProcess: document.querySelector('#include-process').checked,
     visibleBrowser: document.querySelector('#visible-browser').checked
   };
+
+  if (pastedUrls.length > 1) {
+    await runRequest('/api/batch/capture', { ...payload, urls: pastedUrls, text: elements.batchUrlInput.value }, event.submitter, `正在批量采集 ${pastedUrls.length} 篇`);
+    return;
+  }
+
+  if (!payload.url && pastedUrls.length === 1) {
+    payload.url = pastedUrls[0];
+  }
+
   await runRequest('/api/capture', payload, event.submitter, '采集中');
 }
 
@@ -448,6 +506,34 @@ async function handleSiderRecover(event) {
     chatId: document.querySelector('#chat-id-input').value.trim() || elements.siderChatSelect.value
   };
   await runRequest('/api/sider/recover', payload, event.submitter, '正在恢复');
+}
+
+async function handleXImport(event) {
+  event.preventDefault();
+  let payload;
+  try {
+    payload = JSON.parse(elements.xJsonInput.value.trim());
+  } catch {
+    setStatus('请输入有效的 X JSON');
+    return;
+  }
+  const normalized = Array.isArray(payload)
+    ? { posts: payload }
+    : payload;
+  await runRequest('/api/x/import', {
+    collection: elements.xCollectionSelect.value,
+    source: 'browser-extension',
+    ...normalized
+  }, event.submitter, '正在导入 X 数据');
+}
+
+async function handleXSync(button) {
+  await runRequest('/api/x/sync', {
+    collection: elements.xCollectionSelect.value === 'visible' ? 'bookmarks' : elements.xCollectionSelect.value,
+    userId: elements.xUserId.value.trim(),
+    bearerToken: elements.xBearerToken.value.trim(),
+    maxResults: 50
+  }, button, '正在同步 X 官方 API');
 }
 
 async function handleJsonImport(event) {
@@ -911,6 +997,18 @@ function livePayload() {
 
 function isPrivateAiUrl(url) {
   return /(kimi\.com\/chat\/|claude\.ai\/chat\/|chatgpt\.com\/c\/|gemini\.google\.com\/app\/)/i.test(String(url || ''));
+}
+
+function extractHttpUrls(value = '') {
+  const seen = new Set();
+  const urls = [];
+  for (const match of String(value).match(/https?:\/\/[^\s<>"']+/g) || []) {
+    const url = match.replace(/[，。；、,.!?;:）)\]]+$/g, '');
+    if (seen.has(url)) continue;
+    seen.add(url);
+    urls.push(url);
+  }
+  return urls;
 }
 
 function buildClientManifest(doc = {}, files = {}) {
